@@ -29,19 +29,23 @@ public class UserService {
     private JWTUtil jwtUtil;
     private Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 
-    public String save(UsuarioDatos usuarioDatos){
-        Usuario u = usuarioDatos.getUsuario();
-        if(usuarioRepository.findByUser(u.getUser()) == null) {
-            try {
-                u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
-                UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
-                u.setUnidad_productora(up);
-                usuarioRepository.save(u);
-                return "Success";
-            } catch (Exception ignored) {
+    public String save(String token,UsuarioDatos usuarioDatos){
+        byte rol = jwtUtil.getRol(token);
+        if( rol== 1 || rol == 2) {
+            Usuario u = usuarioDatos.getUsuario();
+            if (usuarioRepository.findByUser(u.getUser()) == null) {
+                try {
+                    u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
+                    UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
+                    u.setUnidad_productora(up);
+                    usuarioRepository.save(u);
+                    return "Success";
+                } catch (Exception ignored) {
+                }
             }
+            return "Failed"; //Usuario ya registrado
         }
-        return "Failed"; //Usuario ya registrado
+        return "Not authorized"; //Rol no autorizado
     }
 
     public Map<String,Object> login(Usuario usuario){
@@ -80,7 +84,11 @@ public class UserService {
         return "Failed";
     }
 
-    public List<Usuario> findAll(Pageable pageable){
-        return usuarioRepository.findAll(pageable).getContent();
+    public List<Usuario> findAll(String token,Pageable pageable){
+        byte rol = jwtUtil.getRol(token);
+        if( rol== 1 || rol == 2) {
+            return usuarioRepository.findAll(pageable).getContent();
+        }
+        return null;
     }
 }

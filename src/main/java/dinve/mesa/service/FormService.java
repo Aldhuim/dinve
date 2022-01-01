@@ -43,7 +43,6 @@ public class FormService {
 
     public List<Formulario> getAllForms(String token, Pageable pageable){
         byte rol = jwtUtil.getRol(token);
-        System.out.println(rol);
         if(rol == 1 || rol == 2) {
             return formularioRepository.findAll(pageable).getContent();
         }

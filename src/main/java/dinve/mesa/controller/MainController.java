@@ -39,7 +39,7 @@ public class MainController {
     //Listo
     @PostMapping(value="user/create")
     public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UsuarioDatos usuarioDatos){
-        return userService.save(usuarioDatos);
+        return userService.save(token,usuarioDatos);
     }
     //Listo
     @PutMapping(value = "user/login")
@@ -54,7 +54,7 @@ public class MainController {
     //Listo
     @GetMapping(value="user/get/all")
     public List<Usuario> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
-        return userService.findAll(pageable);
+        return userService.findAll(token,pageable);
     }
     //Listo
     @GetMapping(value="form/get/all")
@@ -76,13 +76,13 @@ public class MainController {
     public String saveForm5B(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5BDatos formulario5BDatos){
         return formService.saveForm5B(token,formulario5BDatos);
     }
-
+    //No probado
     @PostMapping(value = "form5a/save")
     public String saveForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
         //return formService.saveForm5B(token,formulario5ADatos);
         return null;
     }
-
+    //No probado
     @DeleteMapping(value = "form/delete")
     public String deleteForm(@RequestHeader(value = "Authorization") String token,Long id){
         return formService.deleteForm(token,id);

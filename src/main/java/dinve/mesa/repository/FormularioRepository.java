@@ -11,10 +11,20 @@ import org.springframework.stereotype.Repository;
 
 @Repository("FormuarlioRepository")
 public interface FormularioRepository extends JpaRepository<Formulario,Long> {
-    @Query("select f from Formulario f")
+    /*
+    Estado=  0: No enviado ; 1: Enviado
+    Estado2= 0: Guardado ; 1:Deshabilitado
+
+    Estados posibles:
+    Estado=0,Estado2=0 (No enviado y guardado)
+    Estado=1,Estado2=0 (Enviado y guardado)
+    Estado=1,Estado2=1 (Enviado y deshabilitado)
+     */
+
+    @Query("select f from Formulario f where f.estado = 1 and f.estado2 = 0")
     Page<Formulario> findAll(Pageable pageable);
-    @Query("select f from Formulario f where f.usuario = ?1")
+    @Query("select f from Formulario f where f.usuario = ?1 and f.estado = 1 and f.estado2 = 0")
     Page<Formulario> findAllByUsuario(Usuario usuario, Pageable pageable);
-    @Query("select f from Formulario f inner join Usuario u on f.usuario = ?1 inner join UnidadProductora up on u.unidad_productora = ?2")
+    @Query("select f from Formulario f inner join Usuario u on f.usuario = ?1 inner join UnidadProductora up on u.unidad_productora = ?2 where f.estado = 1 and f.estado2 = 2")
     Page<Formulario> findAllByUnidadProductora(Usuario usuario,UnidadProductora unidadProductora,  Pageable pageable);
 }
