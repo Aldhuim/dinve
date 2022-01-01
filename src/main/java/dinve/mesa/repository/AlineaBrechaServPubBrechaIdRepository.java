@@ -1,0 +1,7 @@
+package dinve.mesa.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import dinve.mesa.model.alineamiento_brecha_prioritaria.AlineamientoBrechaServiciosPublicosBrechaIdentificada;
+
+public interface AlineaBrechaServPubBrechaIdRepository extends JpaRepository<AlineamientoBrechaServiciosPublicosBrechaIdentificada,Long> {
+}
