@@ -1,15 +1,13 @@
 package dinve.mesa.converter;
 
+import dinve.mesa.model.descripcion_agregada_proyecto_programa.*;
 import lombok.Getter;
 import lombok.Setter;
 import dinve.mesa.model.Formulario;
 import dinve.mesa.model.alineamiento_brecha_prioritaria.AlineamientoBrechaServiciosPublicosBrechaIdentificada;
 import dinve.mesa.model.alineamiento_brecha_prioritaria.IndicadorBrecha;
-import dinve.mesa.model.descripcion_agregada_proyecto_programa.Capacidad;
-import dinve.mesa.model.descripcion_agregada_proyecto_programa.TipoItem;
-import dinve.mesa.model.formulario.Adjunto;
-import dinve.mesa.model.formulario.Formulario5A;
-import dinve.mesa.model.descripcion_agregada_proyecto_programa.ResponsabilidadFuncionalDescripcionAgregada;
+import dinve.mesa.model.formulario_tipos.Adjunto;
+import dinve.mesa.model.formulario_tipos.Formulario5A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,9 +100,33 @@ public class Formulario5ADatos {
     private List<Float> estudios_base_ioarr;
     private List<Float> total;
 
+    public List<ProgramaDeInversion> getListaProgramaDeInversion(){
+        List<ProgramaDeInversion> lista = new ArrayList<>();
+        for(int i=0;i<id_programa.size();i++){
+            ProgramaDeInversion pro = new ProgramaDeInversion();
+            pro.setId(id_programa.get(i));
+            pro.setTotal_proyectos(total_proyectos.get(i));
+            pro.setTotal_ioarr(total_ioarr.get(i));
+            pro.setGestion_programa(gestion_programa.get(i));
+            pro.setEstudios_base_ioarr(estudios_base_ioarr.get(i));
+            pro.setTotal(total.get(i));
+        }
+        return lista;
+    }
+
     //Datos para ProyectoDeInversion
-    private List<List<Long>> id_proyecto;
-    private List<List<Float>> costo;
+    private List<Long> id_proyecto;
+    private List<Float> costo;
+
+    public List<ProyectoDeInversion> getListaProyectoDeInversion(){
+        List<ProyectoDeInversion> lista = new ArrayList<>();
+        for(int i=0;i<id_proyecto.size();i++){
+            ProyectoDeInversion pro = new ProyectoDeInversion();
+            pro.setId(id_proyecto.get(i));
+            pro.setCosto(costo.get(i));
+        }
+        return lista;
+    }
 
     //Datos para TipoItem
     private List<List<Long>> id_tipo;

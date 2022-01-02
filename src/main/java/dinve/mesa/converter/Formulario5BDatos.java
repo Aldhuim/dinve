@@ -6,8 +6,8 @@ import dinve.mesa.model.Formulario;
 import dinve.mesa.model.alineamiento_brecha_prioritaria.AlineamientoBrechaServiciosPublicosBrechaIdentificada;
 import dinve.mesa.model.alineamiento_brecha_prioritaria.IndicadorBrecha;
 import dinve.mesa.model.descripcion_agregada_ioarr.ResponsabilidadFuncionalDescripcionIOARR;
-import dinve.mesa.model.formulario.Adjunto;
-import dinve.mesa.model.formulario.Formulario5B;
+import dinve.mesa.model.formulario_tipos.Adjunto;
+import dinve.mesa.model.formulario_tipos.Formulario5B;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package dinve.mesa.model.formulario;
+package dinve.mesa.model.formulario_tipos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dinve.mesa.model.Formulario;

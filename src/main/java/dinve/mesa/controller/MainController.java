@@ -7,7 +7,6 @@ import dinve.mesa.model.Formulario;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
 import dinve.mesa.service.FormService;
-import dinve.mesa.service.UPService;
 import dinve.mesa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,59 +18,49 @@ import java.util.Map;
 
 @RestController
 public class MainController {
-    @Autowired
     @Qualifier("UserService")
-    private UserService userService;
-    @Autowired
-    @Qualifier("UPService")
-    private UPService upService;
-    @Autowired
+    private final UserService userService;
     @Qualifier("FormService")
-    private FormService formService;
-
+    private final FormService formService;
+    @Autowired
+    public MainController(UserService userService, FormService formService){
+        this.userService = userService;
+        this.formService = formService;
+    }
     //No implementado
     @PostMapping(value = "up/create")
     public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UnidadProductora unidadProductora){
         //return upService.save(unidadProductora);
         return null;
     }
-
-    //Listo
     @PostMapping(value="user/create")
     public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UsuarioDatos usuarioDatos){
         return userService.save(token,usuarioDatos);
     }
-    //Listo
     @PutMapping(value = "user/login")
     public Map<String, Object> login(@RequestBody Usuario usuario){
         return userService.login(usuario);
     }
-    //Listo
     @PutMapping(value = "user/logout")
     public String logout(@RequestBody Usuario usuario){
         return userService.logout(usuario);
     }
-    //Listo
     @GetMapping(value="user/get/all")
     public List<Usuario> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return userService.findAll(token,pageable);
     }
-    //Listo
     @GetMapping(value="form/get/all")
     public List<Formulario> getAllForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getAllForms(token,pageable);
     }
-    //Listo
     @GetMapping(value="form/get/me")
     public List<Formulario> getMyForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyForms(token,pageable);
     }
-    //Listo
     @GetMapping(value="form/get/up")
     public List<Formulario> getMyUPForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyUPForms(token,pageable);
     }
-    //Listo
     @PostMapping(value = "form5b/save")
     public String saveForm5B(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5BDatos formulario5BDatos){
         return formService.saveForm5B(token,formulario5BDatos);
@@ -79,8 +68,17 @@ public class MainController {
     //No probado
     @PostMapping(value = "form5a/save")
     public String saveForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
-        //return formService.saveForm5B(token,formulario5ADatos);
-        return null;
+        return formService.saveForm5A(token,formulario5ADatos);
+    }
+    //No probado
+    @PutMapping(value = "form5b/update")
+    public String updateForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
+        return formService.updateForm5A(token,formulario5ADatos);
+    }
+    //No probado
+    @PutMapping(value = "form5a/update")
+    public String updateForm5B(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5BDatos formulario5BDatos){
+        return formService.updateForm5B(token,formulario5BDatos);
     }
     //No probado
     @DeleteMapping(value = "form/delete")

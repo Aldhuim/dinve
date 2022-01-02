@@ -2,8 +2,8 @@ package dinve.mesa.model.alineamiento_brecha_prioritaria;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import dinve.mesa.model.formulario.Formulario5A;
-import dinve.mesa.model.formulario.Formulario5B;
+import dinve.mesa.model.formulario_tipos.Formulario5A;
+import dinve.mesa.model.formulario_tipos.Formulario5B;
 
 import javax.persistence.*;
 import java.io.Serializable;

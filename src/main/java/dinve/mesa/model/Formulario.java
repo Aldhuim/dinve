@@ -1,8 +1,8 @@
 package dinve.mesa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dinve.mesa.model.formulario.Formulario5A;
-import dinve.mesa.model.formulario.Formulario5B;
+import dinve.mesa.model.formulario_tipos.Formulario5A;
+import dinve.mesa.model.formulario_tipos.Formulario5B;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
