@@ -14,10 +14,14 @@ import dinve.mesa.model.formulario_tipos.Formulario5B;
 import dinve.mesa.repository.*;
 import dinve.mesa.service.FormService;
 import dinve.mesa.util.JWTUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("FormService")
 public class FormServiceImpl implements FormService {
@@ -68,22 +72,42 @@ public class FormServiceImpl implements FormService {
         this.jwtUtil = jwtUtil;
     }
     @Override
-    public List<Formulario> getAllForms(String token, Pageable pageable){
-        byte rol = jwtUtil.getRol(token);
-        if(rol == 1 || rol == 2) {
-            return formularioRepository.findAll(pageable).getContent();
+    public Map<String, Object> getAllForms(String token, Pageable pageable){
+        Map<String,Object> datos = new HashMap<>();
+        try{
+            byte rol = jwtUtil.getRol(token);
+            if(rol == 1 || rol == 2) {
+                datos.put("AllForms",formularioRepository.findAll(pageable).getContent());
+                return datos;
+            }
+        }catch(ExpiredJwtException e){
+            datos.put("Message","Session expired");
         }
-        return null;
+        return datos;
     }
     @Override
-    public List<Formulario> getMyForms(String token,Pageable pageable){
-        Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-        return formularioRepository.findAllByUsuario(u,pageable).getContent();
+    public Map<String, Object> getMyForms(String token,Pageable pageable){
+        Map<String,Object> datos = new HashMap<>();
+        try {
+            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+            datos.put("MyForms",formularioRepository.findAllByUsuario(u, pageable).getContent());
+            return datos;
+        }catch(ExpiredJwtException e){
+            datos.put("Message","Session expired");
+        }
+        return datos;
     }
     @Override
-    public List<Formulario> getMyUPForms(String token, Pageable pageable){
-        Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-        return formularioRepository.findAllByUnidadProductora(u,u.getUnidad_productora(),pageable).getContent();
+    public Map<String, Object> getMyUPForms(String token, Pageable pageable){
+        Map<String,Object> datos = new HashMap<>();
+        try {
+            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+            datos.put("MyUPForms",formularioRepository.findAllByUnidadProductora(u,u.getUnidad_productora(),pageable).getContent());
+            return datos;
+        }catch(ExpiredJwtException e){
+            datos.put("Message","Session expired");
+        }
+        return datos;
     }
     @Override
     public String saveForm5A(String token, Formulario5ADatos formulario5ADatos){
@@ -107,11 +131,11 @@ public class FormServiceImpl implements FormService {
             for (ResponsabilidadFuncionalDescripcionAgregada resp : respFuncDescAgr) {
                 f5a.addResponsabilidadFuncionalDescripcionAgregada(resp);
             }
-            for(int i=0;i<respFuncDescAgr.size();i++){
+            for (int i = 0; i < respFuncDescAgr.size(); i++) {
                 respFuncDescAgr.get(i).setProgramaDeInversion(progInv.get(i));
                 respFuncDescAgr.get(i).setProyectoDeInversion(proyInv.get(i));
             }
-            for(int i=0;i<tipoItem.size();i++){
+            for (int i = 0; i < tipoItem.size(); i++) {
                 for (int j = 0; j < tipoItem.get(i).size(); j++) {
                     proyInv.get(i).addTipoItem(tipoItem.get(i).get(j));
                     proyInv.get(i).addCapacidad(capacidad.get(i).get(j));
@@ -127,6 +151,8 @@ public class FormServiceImpl implements FormService {
             }
             usuarioRepository.save(u);
             return "Success";
+        }catch(ExpiredJwtException e){
+            return "Session expired";
         }catch (Exception ignored){
         }
         return "Failed";
@@ -159,71 +185,86 @@ public class FormServiceImpl implements FormService {
             }
             usuarioRepository.save(usuario);
             return "Success";
-        }catch (Exception ignored){
-
+        }catch(ExpiredJwtException e) {
+            return "Session expired";
+        }catch(Exception ignored){
         }
         return "Failed";
     }
     @Override
     public String updateForm5A(String token,Formulario5ADatos formulario5ADatos){
         try {
-            Formulario formulario = formulario5ADatos.getFormulario();
-            Formulario5A formulario5A = formulario5ADatos.getFormulario5A();
-            List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescrAgre = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
-            List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
-            List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
-            List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
-            List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
-            List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreSerPubBreIdent = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-            List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
-            List<Adjunto> adjuntoList = formulario5ADatos.getListaAdjunto();
-            formularioRepository.save(formulario);
-            formulario5ARepository.save(formulario5A);
-            adjuntoRepository.saveAll(adjuntoList);
-            responFunAgregadaRepository.saveAll(respFuncDescrAgre);
-            proyectoInversionRepository.saveAll(proyInv);
-            for (List<TipoItem> i : tipoItem) {
-                tipoItemRepository.saveAll(i);
+            if(usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
+                Formulario formulario = formulario5ADatos.getFormulario();
+                Formulario5A formulario5A = formulario5ADatos.getFormulario5A();
+                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescrAgre = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
+                List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
+                List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
+                List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
+                List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
+                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreSerPubBreIdent = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
+                List<Adjunto> adjuntoList = formulario5ADatos.getListaAdjunto();
+                formularioRepository.save(formulario);
+                formulario5ARepository.save(formulario5A);
+                adjuntoRepository.saveAll(adjuntoList);
+                responFunAgregadaRepository.saveAll(respFuncDescrAgre);
+                proyectoInversionRepository.saveAll(proyInv);
+                for (List<TipoItem> i : tipoItem) {
+                    tipoItemRepository.saveAll(i);
+                }
+                for (List<Capacidad> i : capacidad) {
+                    capacidadRepository.saveAll(i);
+                }
+                programaInversionRepository.saveAll(progInv);
+                alineaBrechaServPubBrechaIdRepository.saveAll(aliBreSerPubBreIdent);
+                for (List<IndicadorBrecha> i : indicadorBrechaListList) {
+                    indicadorBrechaRepository.saveAll(i);
+                }
+                return "Success";
             }
-            for (List<Capacidad> i : capacidad) {
-                capacidadRepository.saveAll(i);
-            }
-            programaInversionRepository.saveAll(progInv);
-            alineaBrechaServPubBrechaIdRepository.saveAll(aliBreSerPubBreIdent);
-            for (List<IndicadorBrecha> i : indicadorBrechaListList) {
-                indicadorBrechaRepository.saveAll(i);
-            }
-            return "Success";
+        }catch(ExpiredJwtException e){
+            return "Session expired";
         }catch(Exception ignored){}
-        return "Fail";
+        return "Failed";
     }
     @Override
     public String updateForm5B(String token,Formulario5BDatos formulario5BDatos) {
         try {
-            Formulario formulario = formulario5BDatos.getFormulario();
-            Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
-            List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
-            List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-            List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
-            List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
-            formularioRepository.save(formulario);
-            formulario5BRepository.save(formulario5B);
-            adjuntoRepository.saveAll(adjuntoList);
-            responFunIOARRRepository.saveAll(responsabilidadFuncionalDescripcionIOARRList);
-            alineaBrechaServPubBrechaIdRepository.saveAll(alineamientoBrechaServiciosPublicosBrechaIdentificadaList);
-            for (List<IndicadorBrecha> i:indicadorBrechaListList) {
-                indicadorBrechaRepository.saveAll(i);
+            if(usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
+                Formulario formulario = formulario5BDatos.getFormulario();
+                Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
+                List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
+                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
+                List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
+                formularioRepository.save(formulario);
+                formulario5BRepository.save(formulario5B);
+                adjuntoRepository.saveAll(adjuntoList);
+                responFunIOARRRepository.saveAll(responsabilidadFuncionalDescripcionIOARRList);
+                alineaBrechaServPubBrechaIdRepository.saveAll(alineamientoBrechaServiciosPublicosBrechaIdentificadaList);
+                for (List<IndicadorBrecha> i : indicadorBrechaListList) {
+                    indicadorBrechaRepository.saveAll(i);
+                }
+                return "Success";
             }
-            return "Success";
+        }catch(ExpiredJwtException e){
+            return "Session expired";
         }catch(Exception ignored){}
-        return "Fail";
+        return "Failed";
     }
     @Override
-    public String deleteForm(String token,Long id){
-        Formulario f = formularioRepository.findById(id).orElse(null);
-        if(f != null){
-            formularioRepository.delete(f);
-            return "Success";
+    public String deleteForm(String token,Long id) {
+        try {
+            if (usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
+                Formulario f = formularioRepository.findById(id).orElse(null);
+                if (f != null) {
+                    formularioRepository.delete(f);
+                    return "Success";
+                }
+            }
+        } catch (ExpiredJwtException e) {
+            return "Session expired";
         }
         return "Failed";
     }

@@ -46,19 +46,19 @@ public class MainController {
         return userService.logout(usuario);
     }
     @GetMapping(value="user/get/all")
-    public List<Usuario> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
+    public Map<String, Object> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return userService.findAll(token,pageable);
     }
     @GetMapping(value="form/get/all")
-    public List<Formulario> getAllForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
+    public Map<String, Object> getAllForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getAllForms(token,pageable);
     }
     @GetMapping(value="form/get/me")
-    public List<Formulario> getMyForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
+    public Map<String, Object> getMyForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyForms(token,pageable);
     }
     @GetMapping(value="form/get/up")
-    public List<Formulario> getMyUPForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
+    public Map<String, Object> getMyUPForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyUPForms(token,pageable);
     }
     @PostMapping(value = "form5b/save")

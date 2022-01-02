@@ -9,6 +9,7 @@ import dinve.mesa.repository.UnidadProductoraRepository;
 import dinve.mesa.repository.UsuarioRepository;
 import dinve.mesa.service.UserService;
 import dinve.mesa.util.JWTUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -35,20 +36,24 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public String save(String token,UsuarioDatos usuarioDatos){
-        byte rol = jwtUtil.getRol(token);
-        if( rol== 1 || rol == 2) {
-            Usuario u = usuarioDatos.getUsuario();
-            if (usuarioRepository.findByUser(u.getUser()) == null) {
-                try {
-                    u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
-                    UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
-                    u.setUnidad_productora(up);
-                    usuarioRepository.save(u);
-                    return "Success";
-                } catch (Exception ignored) {
+        try{
+            byte rol = jwtUtil.getRol(token);
+            if( rol== 1 || rol == 2) {
+                Usuario u = usuarioDatos.getUsuario();
+                if (usuarioRepository.findByUser(u.getUser()) == null) {
+                    try {
+                        u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
+                        UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
+                        u.setUnidad_productora(up);
+                        usuarioRepository.save(u);
+                        return "Success";
+                    } catch (Exception ignored) {
+                    }
                 }
+                return "Failed"; //Usuario ya registrado
             }
-            return "Failed"; //Usuario ya registrado
+        }catch(ExpiredJwtException e){
+            return "Session expired";
         }
         return "Not authorized"; //Rol no autorizado
     }
@@ -89,11 +94,17 @@ public class UserServiceImpl implements UserService {
         return "Failed";
     }
     @Override
-    public List<Usuario> findAll(String token,Pageable pageable){
-        byte rol = jwtUtil.getRol(token);
-        if( rol== 1 || rol == 2) {
-            return usuarioRepository.findAll(pageable).getContent();
+    public Map<String,Object> findAll(String token,Pageable pageable){
+        Map<String,Object> datos = new HashMap<>();
+        try{
+            byte rol = jwtUtil.getRol(token);
+            if( rol== 1 || rol == 2) {
+                datos.put("Usuarios",usuarioRepository.findAll(pageable).getContent());
+                return datos;
+            }
+        }catch(ExpiredJwtException e){
+            datos.put("Message","Session expired");
         }
-        return null;
+        return datos;
     }
 }
