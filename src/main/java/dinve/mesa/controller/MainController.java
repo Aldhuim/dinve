@@ -65,22 +65,18 @@ public class MainController {
     public String saveForm5B(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5BDatos formulario5BDatos){
         return formService.saveForm5B(token,formulario5BDatos);
     }
-    //No probado
     @PostMapping(value = "form5a/save")
     public String saveForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
         return formService.saveForm5A(token,formulario5ADatos);
     }
-    //No probado
     @PutMapping(value = "form5b/update")
     public String updateForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
         return formService.updateForm5A(token,formulario5ADatos);
     }
-    //No probado
     @PutMapping(value = "form5a/update")
     public String updateForm5B(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5BDatos formulario5BDatos){
         return formService.updateForm5B(token,formulario5BDatos);
     }
-    //No probado
     @DeleteMapping(value = "form/delete")
     public String deleteForm(@RequestHeader(value = "Authorization") String token,Long id){
         return formService.deleteForm(token,id);
