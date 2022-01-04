@@ -19,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service("FormService")
 public class FormServiceImpl implements FormService {
@@ -75,12 +75,15 @@ public class FormServiceImpl implements FormService {
     @Override
     public Map<String, Object> getAllForms(String token, Pageable pageable){
         Map<String,Object> datos = new HashMap<>();
-        try{
+        try {
             byte rol = jwtUtil.getRol(token);
-            if(rol == 1 || rol == 2) {
+            Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
+
+            if((rol == 1 || rol == 2) && (u.isActivo() == true)) {
                 datos.put("AllForms",formularioRepository.findAll(pageable).getContent());
                 return datos;
             }
+
         }catch(ExpiredJwtException e){
             datos.put("Message","Session expired");
         }
@@ -91,8 +94,10 @@ public class FormServiceImpl implements FormService {
         Map<String,Object> datos = new HashMap<>();
         try {
             Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-            datos.put("MyForms",formularioRepository.findAllByUsuario(u, pageable).getContent());
-            return datos;
+            if(u.isActivo() == true) {
+                datos.put("MyForms", formularioRepository.findAllByUsuario(u, pageable).getContent());
+                return datos;
+            }
         }catch(ExpiredJwtException e){
             datos.put("Message","Session expired");
         }
@@ -103,8 +108,10 @@ public class FormServiceImpl implements FormService {
         Map<String,Object> datos = new HashMap<>();
         try {
             Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-            datos.put("MyUPForms",formularioRepository.findAllByUnidadProductora(u,u.getUnidad_productora(),pageable).getContent());
-            return datos;
+            if(u.isActivo() == true) {
+                datos.put("MyUPForms", formularioRepository.findAllByUnidadProductora(u, u.getUnidad_productora(), pageable).getContent());
+                return datos;
+            }
         }catch(ExpiredJwtException e){
             datos.put("Message","Session expired");
         }
@@ -114,78 +121,84 @@ public class FormServiceImpl implements FormService {
     public String saveForm5A(String token, Formulario5ADatos formulario5ADatos){
         try {
             Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-            Formulario f = formulario5ADatos.getFormulario();
-            Formulario5A f5a = formulario5ADatos.getFormulario5A();
-            List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescAgr = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
-            List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
-            List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
-            List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
-            List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
-            List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreServPubBreIden = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-            List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
-            List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();
-            u.addFormulario(f);
-            f.setFormulario5A(f5a);
-            for (Adjunto adj : adjunto) {
-                f5a.addAdjunto(adj);
-            }
-            for (ResponsabilidadFuncionalDescripcionAgregada resp : respFuncDescAgr) {
-                f5a.addResponsabilidadFuncionalDescripcionAgregada(resp);
-            }
-            for (int i = 0; i < respFuncDescAgr.size(); i++) {
-                respFuncDescAgr.get(i).setProgramaDeInversion(progInv.get(i));
-                respFuncDescAgr.get(i).setProyectoDeInversion(proyInv.get(i));
-            }
-            for (int i = 0; i < tipoItem.size(); i++) {
-                for (int j = 0; j < tipoItem.get(i).size(); j++) {
-                    proyInv.get(i).addTipoItem(tipoItem.get(i).get(j));
-                    proyInv.get(i).addCapacidad(capacidad.get(i).get(j));
+            if(u.isActivo() == true) {
+                Formulario f = formulario5ADatos.getFormulario();
+                Formulario5A f5a = formulario5ADatos.getFormulario5A();
+                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescAgr = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
+                List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
+                List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
+                List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
+                List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
+                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreServPubBreIden = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
+                List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();
+                u.addFormulario(f);
+                f.setFormulario5A(f5a);
+                for (Adjunto adj : adjunto) {
+                    f5a.addAdjunto(adj);
                 }
-            }
-            for (AlineamientoBrechaServiciosPublicosBrechaIdentificada ali : aliBreServPubBreIden) {
-                f5a.addALineamientoBrechaServiciosPublicosBrechaIdentificada(ali);
-            }
-            for (int i = 0; i < indBre.size(); i++) {
-                for (int j = 0; j < indBre.get(i).size(); j++) {
-                    aliBreServPubBreIden.get(i).addIndicadorBrecha(indBre.get(i).get(j));
+                for (ResponsabilidadFuncionalDescripcionAgregada resp : respFuncDescAgr) {
+                    f5a.addResponsabilidadFuncionalDescripcionAgregada(resp);
                 }
+                for (int i = 0; i < respFuncDescAgr.size(); i++) {
+                    respFuncDescAgr.get(i).setProgramaDeInversion(progInv.get(i));
+                    respFuncDescAgr.get(i).setProyectoDeInversion(proyInv.get(i));
+                }
+                for (int i = 0; i < tipoItem.size(); i++) {
+                    for (int j = 0; j < tipoItem.get(i).size(); j++) {
+                        proyInv.get(i).addTipoItem(tipoItem.get(i).get(j));
+                        proyInv.get(i).addCapacidad(capacidad.get(i).get(j));
+                    }
+                }
+                for (AlineamientoBrechaServiciosPublicosBrechaIdentificada ali : aliBreServPubBreIden) {
+                    f5a.addALineamientoBrechaServiciosPublicosBrechaIdentificada(ali);
+                }
+                for (int i = 0; i < indBre.size(); i++) {
+                    for (int j = 0; j < indBre.get(i).size(); j++) {
+                        aliBreServPubBreIden.get(i).addIndicadorBrecha(indBre.get(i).get(j));
+                    }
+                }
+
+                usuarioRepository.save(u);
+                return "Success";
             }
-            usuarioRepository.save(u);
-            return "Success";
         }catch(ExpiredJwtException e){
             return "Session expired";
         }catch (Exception ignored){
         }
+
         return "Failed";
     }
     @Override
     public String saveForm5B(String token, Formulario5BDatos formulario5BDatos){
         try {
             Usuario usuario = usuarioRepository.findByUser(jwtUtil.getUser(token));
-            Formulario formulario = formulario5BDatos.getFormulario();
-            Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
-            List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
-            List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-            List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
-            List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
-            usuario.addFormulario(formulario);
-            formulario.setFormulario5B(formulario5B);
-            for (Adjunto adj : adjuntoList) {
-                formulario5B.addAdjunto(adj);
-            }
-            for (ResponsabilidadFuncionalDescripcionIOARR resp : responsabilidadFuncionalDescripcionIOARRList) {
-                formulario5B.addResponsabilidadFuncionalDescripcionIOARR(resp);
-            }
-            for (AlineamientoBrechaServiciosPublicosBrechaIdentificada ali : alineamientoBrechaServiciosPublicosBrechaIdentificadaList) {
-                formulario5B.addALineamientoBrechaServiciosPublicosBrechaIdentificada(ali);
-            }
-            for (int i = 0; i < indicadorBrechaListList.size(); i++) {
-                for (int j = 0; j < indicadorBrechaListList.get(i).size(); j++) {
-                    alineamientoBrechaServiciosPublicosBrechaIdentificadaList.get(i).addIndicadorBrecha(indicadorBrechaListList.get(i).get(j));
+            if(usuario.isActivo() == true) {
+                Formulario formulario = formulario5BDatos.getFormulario();
+                Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
+                List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
+                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
+                List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
+                usuario.addFormulario(formulario);
+                formulario.setFormulario5B(formulario5B);
+                for (Adjunto adj : adjuntoList) {
+                    formulario5B.addAdjunto(adj);
                 }
+                for (ResponsabilidadFuncionalDescripcionIOARR resp : responsabilidadFuncionalDescripcionIOARRList) {
+                    formulario5B.addResponsabilidadFuncionalDescripcionIOARR(resp);
+                }
+                for (AlineamientoBrechaServiciosPublicosBrechaIdentificada ali : alineamientoBrechaServiciosPublicosBrechaIdentificadaList) {
+                    formulario5B.addALineamientoBrechaServiciosPublicosBrechaIdentificada(ali);
+                }
+                for (int i = 0; i < indicadorBrechaListList.size(); i++) {
+                    for (int j = 0; j < indicadorBrechaListList.get(i).size(); j++) {
+                        alineamientoBrechaServiciosPublicosBrechaIdentificadaList.get(i).addIndicadorBrecha(indicadorBrechaListList.get(i).get(j));
+                    }
+                }
+                usuarioRepository.save(usuario);
+                return "Success";
             }
-            usuarioRepository.save(usuario);
-            return "Success";
         }catch(ExpiredJwtException e) {
             return "Session expired";
         }catch(Exception ignored){
@@ -196,33 +209,36 @@ public class FormServiceImpl implements FormService {
     public String updateForm5A(String token,Formulario5ADatos formulario5ADatos){
         try {
             if(usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
-                Formulario formulario = formulario5ADatos.getFormulario();
-                Formulario5A formulario5A = formulario5ADatos.getFormulario5A();
-                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescrAgre = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
-                List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
-                List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
-                List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
-                List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
-                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreSerPubBreIdent = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-                List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
-                List<Adjunto> adjuntoList = formulario5ADatos.getListaAdjunto();
-                formularioRepository.save(formulario);
-                formulario5ARepository.save(formulario5A);
-                adjuntoRepository.saveAll(adjuntoList);
-                responFunAgregadaRepository.saveAll(respFuncDescrAgre);
-                proyectoInversionRepository.saveAll(proyInv);
-                for (List<TipoItem> i : tipoItem) {
-                    tipoItemRepository.saveAll(i);
+                Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+                if(u.isActivo() == true) {
+                    Formulario formulario = formulario5ADatos.getFormulario();
+                    Formulario5A formulario5A = formulario5ADatos.getFormulario5A();
+                    List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescrAgre = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
+                    List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
+                    List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
+                    List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
+                    List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
+                    List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreSerPubBreIdent = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                    List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
+                    List<Adjunto> adjuntoList = formulario5ADatos.getListaAdjunto();
+                    formularioRepository.save(formulario);
+                    formulario5ARepository.save(formulario5A);
+                    adjuntoRepository.saveAll(adjuntoList);
+                    responFunAgregadaRepository.saveAll(respFuncDescrAgre);
+                    proyectoInversionRepository.saveAll(proyInv);
+                    for (List<TipoItem> i : tipoItem) {
+                        tipoItemRepository.saveAll(i);
+                    }
+                    for (List<Capacidad> i : capacidad) {
+                        capacidadRepository.saveAll(i);
+                    }
+                    programaInversionRepository.saveAll(progInv);
+                    alineaBrechaServPubBrechaIdRepository.saveAll(aliBreSerPubBreIdent);
+                    for (List<IndicadorBrecha> i : indicadorBrechaListList) {
+                        indicadorBrechaRepository.saveAll(i);
+                    }
+                    return "Success";
                 }
-                for (List<Capacidad> i : capacidad) {
-                    capacidadRepository.saveAll(i);
-                }
-                programaInversionRepository.saveAll(progInv);
-                alineaBrechaServPubBrechaIdRepository.saveAll(aliBreSerPubBreIdent);
-                for (List<IndicadorBrecha> i : indicadorBrechaListList) {
-                    indicadorBrechaRepository.saveAll(i);
-                }
-                return "Success";
             }
         }catch(ExpiredJwtException e){
             return "Session expired";
@@ -233,21 +249,24 @@ public class FormServiceImpl implements FormService {
     public String updateForm5B(String token,Formulario5BDatos formulario5BDatos) {
         try {
             if(usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
-                Formulario formulario = formulario5BDatos.getFormulario();
-                Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
-                List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
-                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-                List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
-                List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
-                formularioRepository.save(formulario);
-                formulario5BRepository.save(formulario5B);
-                adjuntoRepository.saveAll(adjuntoList);
-                responFunIOARRRepository.saveAll(responsabilidadFuncionalDescripcionIOARRList);
-                alineaBrechaServPubBrechaIdRepository.saveAll(alineamientoBrechaServiciosPublicosBrechaIdentificadaList);
-                for (List<IndicadorBrecha> i : indicadorBrechaListList) {
-                    indicadorBrechaRepository.saveAll(i);
+                Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+                if(u.isActivo() == true) {
+                    Formulario formulario = formulario5BDatos.getFormulario();
+                    Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
+                    List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
+                    List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                    List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
+                    List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
+                    formularioRepository.save(formulario);
+                    formulario5BRepository.save(formulario5B);
+                    adjuntoRepository.saveAll(adjuntoList);
+                    responFunIOARRRepository.saveAll(responsabilidadFuncionalDescripcionIOARRList);
+                    alineaBrechaServPubBrechaIdRepository.saveAll(alineamientoBrechaServiciosPublicosBrechaIdentificadaList);
+                    for (List<IndicadorBrecha> i : indicadorBrechaListList) {
+                        indicadorBrechaRepository.saveAll(i);
+                    }
+                    return "Success";
                 }
-                return "Success";
             }
         }catch(ExpiredJwtException e){
             return "Session expired";
@@ -257,7 +276,8 @@ public class FormServiceImpl implements FormService {
     @Override
     public String deleteForm(String token,Long id) {
         try {
-            if (usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
+            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+            if (usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token))) && u.isActivo() == true) {
                 Formulario f = formularioRepository.findById(id).orElse(null);
                 if (f != null) {
                     formularioRepository.delete(f);

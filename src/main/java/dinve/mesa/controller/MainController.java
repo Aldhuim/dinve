@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -36,30 +37,37 @@ public class MainController {
         //return upService.save(unidadProductora);
         return null;
     }
+    //Probado
     @PostMapping(value="user/create")
     public String create(@RequestHeader(value = "Authorization") String token, @RequestBody UsuarioDatos usuarioDatos){
         return userService.save(token,usuarioDatos);
     }
+    //Probado
     @PutMapping(value = "user/login")
     public Map<String, Object> login(@RequestBody Usuario usuario){
         return userService.login(usuario);
     }
+    //Probado
     @PutMapping(value = "user/logout")
     public String logout(@RequestBody Usuario usuario){
         return userService.logout(usuario);
     }
+    //Probado
     @GetMapping(value="user/get/all")
     public Map<String, Object> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return userService.findAll(token,pageable);
     }
+    //Probado
     @GetMapping(value="form/get/all")
     public Map<String, Object> getAllForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getAllForms(token,pageable);
     }
+    //Probado
     @GetMapping(value="form/get/me")
     public Map<String, Object> getMyForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyForms(token,pageable);
     }
+
     @GetMapping(value="form/get/up")
     public Map<String, Object> getMyUPForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyUPForms(token,pageable);
@@ -68,8 +76,9 @@ public class MainController {
     public String saveForm5B(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5BDatos formulario5BDatos){
         return formService.saveForm5B(token,formulario5BDatos);
     }
+
     @PostMapping(value = "form5a/save")
-    public String saveForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
+    public String saveForm5A(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5ADatos formulario5ADatos){
         return formService.saveForm5A(token,formulario5ADatos);
     }
     @PutMapping(value = "form5b/update")

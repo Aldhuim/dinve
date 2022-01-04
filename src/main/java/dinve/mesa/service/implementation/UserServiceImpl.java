@@ -41,13 +41,17 @@ public class UserServiceImpl implements UserService {
             if( rol== 1 || rol == 2) {
                 Usuario u = usuarioDatos.getUsuario();
                 if (usuarioRepository.findByUser(u.getUser()) == null) {
-                    try {
-                        u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
-                        UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
-                        u.setUnidad_productora(up);
-                        usuarioRepository.save(u);
-                        return "Success";
-                    } catch (Exception ignored) {
+                    if (u.getRol() < rol){
+                        try {
+                            u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
+                            UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
+                            u.setUnidad_productora(up);
+                            usuarioRepository.save(u);
+                            return "Success";
+                        } catch (Exception ignored) {
+                        }
+                    } else{
+                        return "Same level in 'rol'"; //No se puede crear un usuario del mismo nivel de rol
                     }
                 }
                 return "Failed"; //Usuario ya registrado
@@ -98,7 +102,8 @@ public class UserServiceImpl implements UserService {
         Map<String,Object> datos = new HashMap<>();
         try{
             byte rol = jwtUtil.getRol(token);
-            if( rol== 1 || rol == 2) {
+            Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
+            if( (rol== 1 || rol == 2) && (u.isActivo() == true) ) {
                 datos.put("Usuarios",usuarioRepository.findAll(pageable).getContent());
                 return datos;
             }
