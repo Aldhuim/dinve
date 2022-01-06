@@ -2,12 +2,14 @@ package dinve.mesa.controller;
 
 import dinve.mesa.converter.Formulario5ADatos;
 import dinve.mesa.converter.Formulario5BDatos;
+import dinve.mesa.converter.UnidadProductoraDatos;
 import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.Formulario;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
 import dinve.mesa.service.FormService;
 import dinve.mesa.service.UserService;
+import dinve.mesa.service.UpService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,16 +28,19 @@ public class MainController {
     private final UserService userService;
     @Qualifier("FormService")
     private final FormService formService;
+    @Qualifier("UpService")
+    private final UpService upService;
     @Autowired
-    public MainController(UserService userService, FormService formService){
+    public MainController(UserService userService, FormService formService, UpService upService){
         this.userService = userService;
         this.formService = formService;
+        this.upService = upService;
     }
     //No implementado
     @PostMapping(value = "up/create")
-    public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UnidadProductora unidadProductora){
-        //return upService.save(unidadProductora);
-        return null;
+    public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UnidadProductoraDatos unidadProductora){
+        return upService.save(token, unidadProductora);
+        //return null;
     }
     //Probado
     @PostMapping(value="user/create")
