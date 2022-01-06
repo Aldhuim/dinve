@@ -36,11 +36,15 @@ public class MainController {
         this.formService = formService;
         this.upService = upService;
     }
-    //No implementado
+    //Probado
     @PostMapping(value = "up/create")
     public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UnidadProductoraDatos unidadProductora){
         return upService.save(token, unidadProductora);
-        //return null;
+    }
+    //Probado
+    @GetMapping(value = "up/findAll")
+    public Map<String, Object> getAllUp(@RequestHeader(value = "Authorization") String token, Pageable pageable){
+        return  upService.getAllUp(token, pageable);
     }
     //Probado
     @PostMapping(value="user/create")

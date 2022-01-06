@@ -22,6 +22,7 @@ import java.util.Map;
 @RestController
 public class UpController {
 
+    //Métodos ya implementados en el main Controller
     @Autowired
     private  UpService upService;
 
