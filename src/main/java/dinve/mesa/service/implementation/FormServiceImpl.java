@@ -130,7 +130,6 @@ public class FormServiceImpl implements FormService {
                 List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
                 List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();
 
-                System.out.println("GET COSTO: "+formulario5ADatos.getCosto());
                 if(formulario5ADatos.getCosto()== null){
                     List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
 
