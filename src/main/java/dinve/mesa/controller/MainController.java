@@ -67,31 +67,32 @@ public class MainController {
     public Map<String, Object> getMyForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyForms(token,pageable);
     }
-
+    //No implementado
     @GetMapping(value="form/get/up")
     public Map<String, Object> getMyUPForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return formService.getMyUPForms(token,pageable);
     }
-    //POR PROBAR
+    //Probado
     @PostMapping(value = "form5b/save")
     public String saveForm5B(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5BDatos formulario5BDatos){
         return formService.saveForm5B(token,formulario5BDatos);
     }
-    //PROBADO
+    //Probado
     @PostMapping(value = "form5a/save")
     public String saveForm5A(@RequestHeader(value = "Authorization") String token, @RequestBody Formulario5ADatos formulario5ADatos){
         return formService.saveForm5A(token,formulario5ADatos);
     }
-
-    @PutMapping(value = "form5b/update")
+    //Por probar
+    @PutMapping(value = "form5a/update")
     public String updateForm5A(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5ADatos formulario5ADatos){
         return formService.updateForm5A(token,formulario5ADatos);
     }
-    @PutMapping(value = "form5a/update")
+    //Por probar
+    @PutMapping(value = "form5b/update")
     public String updateForm5B(@RequestHeader(value = "Authorization") String token,@RequestBody Formulario5BDatos formulario5BDatos){
         return formService.updateForm5B(token,formulario5BDatos);
     }
-    //PROBADO
+    //Probado
     @DeleteMapping(value = "form/delete")
     public String deleteForm(@RequestHeader(value = "Authorization") String token,Long id){
         return formService.deleteForm(token,id);

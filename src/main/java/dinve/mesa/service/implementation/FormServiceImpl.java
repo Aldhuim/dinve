@@ -120,15 +120,15 @@ public class FormServiceImpl implements FormService {
     @Override
     public String saveForm5A(String token, Formulario5ADatos formulario5ADatos){
         try {
-            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));//CHECK
-            formulario5ADatos.setId_user(u.getId());//CHECK
+            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+            formulario5ADatos.setId_user(u.getId());
             if(u.isActivo() == true) {
-                Formulario f = formulario5ADatos.getFormulario();//CHECK
-                Formulario5A f5a = formulario5ADatos.getFormulario5A();//CHECK
-                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescAgr = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();//CHECK
-                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreServPubBreIden = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();//CHECK
-                List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();//CHECK
-                List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();//CHECK
+                Formulario f = formulario5ADatos.getFormulario();
+                Formulario5A f5a = formulario5ADatos.getFormulario5A();
+                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescAgr = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
+                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreServPubBreIden = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
+                List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
+                List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();
 
                 if(formulario5ADatos.getCosto()== null){
                     List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
@@ -164,18 +164,7 @@ public class FormServiceImpl implements FormService {
                 for (ResponsabilidadFuncionalDescripcionAgregada resp : respFuncDescAgr) {
                     f5a.addResponsabilidadFuncionalDescripcionAgregada(resp);
                 }
-                /*
-                for (int i = 0; i < respFuncDescAgr.size(); i++) {
-                    respFuncDescAgr.get(i).setProgramaDeInversion(progInv.get(i));
-                    respFuncDescAgr.get(i).setProyectoDeInversion(proyInv.get(i));
-                }
 
-                for (int i = 0; i < tipoItem.size(); i++) {
-                    for (int j = 0; j < tipoItem.get(i).size(); j++) {
-                        proyInv.get(i).addTipoItem(tipoItem.get(i).get(j));
-                        proyInv.get(i).addCapacidad(capacidad.get(i).get(j));
-                    }
-                }*/
                 for (AlineamientoBrechaServiciosPublicosBrechaIdentificada ali : aliBreServPubBreIden) {
                     f5a.addALineamientoBrechaServiciosPublicosBrechaIdentificada(ali);
                 }
@@ -201,7 +190,8 @@ public class FormServiceImpl implements FormService {
     public String saveForm5B(String token, Formulario5BDatos formulario5BDatos){
         try {
             Usuario usuario = usuarioRepository.findByUser(jwtUtil.getUser(token));
-            if(usuario.isActivo() == true) {
+            formulario5BDatos.setId_user(usuario.getId());
+            if(usuario.isActivo()) {
                 Formulario formulario = formulario5BDatos.getFormulario();
                 Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
                 List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
@@ -238,7 +228,8 @@ public class FormServiceImpl implements FormService {
         try {
             if(usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
                 Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-                if(u.isActivo() == true) {
+
+                if(u.isActivo() && formulario5ADatos.getId_user() == u.getId()) {
                     Formulario formulario = formulario5ADatos.getFormulario();
                     Formulario5A formulario5A = formulario5ADatos.getFormulario5A();
                     List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescrAgre = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
@@ -278,13 +269,18 @@ public class FormServiceImpl implements FormService {
         try {
             if(usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token)))) {
                 Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
-                if(u.isActivo() == true) {
+                formulario5BDatos.setId_user(u.getId());
+                System.out.println("Id_form: "+formulario5BDatos.getId_form());
+                System.out.println("Id_form5b: "+formulario5BDatos.getId_form5b());
+                if(u.isActivo() && formulario5BDatos.getId_user() == u.getId()) {
                     Formulario formulario = formulario5BDatos.getFormulario();
                     Formulario5B formulario5B = formulario5BDatos.getFormulario5B();
                     List<ResponsabilidadFuncionalDescripcionIOARR> responsabilidadFuncionalDescripcionIOARRList = formulario5BDatos.getListaResponsabilidadFuncionalDescripcionIOARR();
                     List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> alineamientoBrechaServiciosPublicosBrechaIdentificadaList = formulario5BDatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
                     List<List<IndicadorBrecha>> indicadorBrechaListList = formulario5BDatos.getListaDeListaDeIndicadorBrecha();
                     List<Adjunto> adjuntoList = formulario5BDatos.getListaAdjunto();
+                    System.out.println("Id_form: "+formulario5BDatos.getId_form());
+                    System.out.println("Id_form5b: "+formulario5BDatos.getId_form5b());
                     formularioRepository.save(formulario);
                     formulario5BRepository.save(formulario5B);
                     adjuntoRepository.saveAll(adjuntoList);
@@ -293,7 +289,9 @@ public class FormServiceImpl implements FormService {
                     for (List<IndicadorBrecha> i : indicadorBrechaListList) {
                         indicadorBrechaRepository.saveAll(i);
                     }
-                    return "Success";
+                    System.out.println("Id_form: "+formulario5BDatos.getId_form());
+                    System.out.println("Id_form5b: "+formulario5BDatos.getId_form5b());
+                    return "Success ";
                 }
             }
         }catch(ExpiredJwtException e){
