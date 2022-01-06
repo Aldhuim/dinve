@@ -43,7 +43,7 @@ public class UpServiceImpl implements UpService {
                 if (unidadProductoraRepository.findByName(up.getNombre()) == null){
                     try{
                         unidadProductoraRepository.save(up);
-                        return "Succes";
+                        return "Success";
                     } catch (Exception ignored){
                     }
                 } else {
