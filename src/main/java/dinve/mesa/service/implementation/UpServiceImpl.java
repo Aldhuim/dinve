@@ -60,16 +60,32 @@ public class UpServiceImpl implements UpService {
 
     @Override
     public Map<String, Object> getAllUp(String token, Pageable pageable) {
-        return null;
+        Map<String,Object> lista_up = new HashMap<>();
+
+        try{
+            byte rol = jwtUtil.getRol(token);
+            Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
+            if( (rol== 1 || rol == 2) && (u.isActivo() == true) ) {
+                lista_up.put("Unidades productoras",unidadProductoraRepository.findAll(pageable).getContent());
+                return lista_up;
+            } else {
+                lista_up.put("Message","No access");
+            }
+        }catch(ExpiredJwtException e){
+            lista_up.put("Message","Session expired");
+        }
+        return lista_up;
     }
 
     @Override
     public Map<String, Object> getUp(String token, Pageable pageable) {
+
         return null;
     }
 
     @Override
     public String deleteUp(String token, Long id) {
+
         return null;
     }
 }

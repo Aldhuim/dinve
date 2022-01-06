@@ -30,5 +30,9 @@ public class UpController {
         return upService.save(token, unidadProductora);
         //return null;
     }
+    @GetMapping(value = "up/findAll")
+    public Map<String, Object> getAllUp(@RequestHeader(value = "Authorization") String token, Pageable pageable){
+        return  upService.getAllUp(token, pageable);
+    }
 
 }
