@@ -120,18 +120,42 @@ public class FormServiceImpl implements FormService {
     @Override
     public String saveForm5A(String token, Formulario5ADatos formulario5ADatos){
         try {
-            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));//CHECK
+            formulario5ADatos.setId_user(u.getId());//CHECK
             if(u.isActivo() == true) {
-                Formulario f = formulario5ADatos.getFormulario();
-                Formulario5A f5a = formulario5ADatos.getFormulario5A();
-                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescAgr = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();
-                List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
-                List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
-                List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
-                List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
-                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreServPubBreIden = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();
-                List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();
-                List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();
+                Formulario f = formulario5ADatos.getFormulario();//CHECK
+                Formulario5A f5a = formulario5ADatos.getFormulario5A();//CHECK
+                List<ResponsabilidadFuncionalDescripcionAgregada> respFuncDescAgr = formulario5ADatos.getListaResponsabilidadFuncionalDescripcionAgregada();//CHECK
+                List<AlineamientoBrechaServiciosPublicosBrechaIdentificada> aliBreServPubBreIden = formulario5ADatos.getListaAlineamientoBrechaServiciosPublicosBrechaIdentificada();//CHECK
+                List<List<IndicadorBrecha>> indBre = formulario5ADatos.getListaDeListaDeIndicadorBrecha();//CHECK
+                List<Adjunto> adjunto = formulario5ADatos.getListaAdjunto();//CHECK
+
+                if(formulario5ADatos.getCosto()== null){
+                    List<ProgramaDeInversion> progInv = formulario5ADatos.getListaProgramaDeInversion();
+
+                    for(int i=0; i<progInv.size(); i++){
+                        respFuncDescAgr.get(i).setProgramaDeInversion(progInv.get(i));
+                    }
+                } else {
+                    List<ProyectoDeInversion> proyInv = formulario5ADatos.getListaProyectoDeInversion();
+                    List<List<TipoItem>> tipoItem = formulario5ADatos.getListaDeListaDeTipoItem();
+                    List<List<Capacidad>> capacidad = formulario5ADatos.getListaDeListaDeCapacidad();
+
+                    for(int i=0; i<proyInv.size(); i++) {
+                        respFuncDescAgr.get(i).setProyectoDeInversion(proyInv.get(i));
+                    }
+                    for (int i=0;i<tipoItem.size();i++){
+                        for(int j=0;j<tipoItem.get(i).size();j++) {
+                            proyInv.get(i).addTipoItem(tipoItem.get(i).get(j));
+                        }
+                    }
+                    for (int k=0;k<capacidad.size();k++){
+                        for(int l=0;l<capacidad.get(k).size();l++){
+                            proyInv.get(k).addCapacidad(capacidad.get(k).get(l));
+                        }
+                    }
+                }
+
                 u.addFormulario(f);
                 f.setFormulario5A(f5a);
                 for (Adjunto adj : adjunto) {
@@ -140,16 +164,18 @@ public class FormServiceImpl implements FormService {
                 for (ResponsabilidadFuncionalDescripcionAgregada resp : respFuncDescAgr) {
                     f5a.addResponsabilidadFuncionalDescripcionAgregada(resp);
                 }
+                /*
                 for (int i = 0; i < respFuncDescAgr.size(); i++) {
                     respFuncDescAgr.get(i).setProgramaDeInversion(progInv.get(i));
                     respFuncDescAgr.get(i).setProyectoDeInversion(proyInv.get(i));
                 }
+
                 for (int i = 0; i < tipoItem.size(); i++) {
                     for (int j = 0; j < tipoItem.get(i).size(); j++) {
                         proyInv.get(i).addTipoItem(tipoItem.get(i).get(j));
                         proyInv.get(i).addCapacidad(capacidad.get(i).get(j));
                     }
-                }
+                }*/
                 for (AlineamientoBrechaServiciosPublicosBrechaIdentificada ali : aliBreServPubBreIden) {
                     f5a.addALineamientoBrechaServiciosPublicosBrechaIdentificada(ali);
                 }
@@ -161,6 +187,8 @@ public class FormServiceImpl implements FormService {
 
                 usuarioRepository.save(u);
                 return "Success";
+            }else {
+                return "Inactive user";
             }
         }catch(ExpiredJwtException e){
             return "Session expired";

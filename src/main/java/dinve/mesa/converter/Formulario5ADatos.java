@@ -24,7 +24,7 @@ public class Formulario5ADatos {
         Formulario formulario = new Formulario();
         formulario.setId(id_form);
         formulario.setEstado(estado);
-        formulario.setEstado2(estado);
+        formulario.setEstado2(estado2);
         return formulario;
     }
     //Datos para Formulario5A

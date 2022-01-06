@@ -23,6 +23,7 @@ public class Formulario5A implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false,unique = true)
     private String nombre_idea;
     private String funcional_division;
     private String funcional_funcion;
