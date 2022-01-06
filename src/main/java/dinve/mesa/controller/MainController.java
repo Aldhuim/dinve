@@ -42,9 +42,20 @@ public class MainController {
         return upService.save(token, unidadProductora);
     }
     //Probado
+    @PutMapping(value = "up/update")
+    public String updateUp(@RequestHeader(value = "Authorization") String token,@RequestBody UnidadProductoraDatos unidadProductora){
+        return upService.save(token,unidadProductora);
+    }
+    //Probado
     @GetMapping(value = "up/findAll")
     public Map<String, Object> getAllUp(@RequestHeader(value = "Authorization") String token, Pageable pageable){
         return  upService.getAllUp(token, pageable);
+    }
+    //Probado
+    @DeleteMapping(value = "up/delete")
+    public String deleteUp(@RequestHeader(value = "Authorization") String token,Long id){
+        return upService.deleteUp(token,id);
+        //return null;
     }
     //Probado
     @PostMapping(value="user/create")

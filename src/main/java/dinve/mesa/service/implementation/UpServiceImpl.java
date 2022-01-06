@@ -2,6 +2,7 @@ package dinve.mesa.service.implementation;
 
 
 import dinve.mesa.converter.UnidadProductoraDatos;
+import dinve.mesa.model.Formulario;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
 import dinve.mesa.repository.UnidadProductoraRepository;
@@ -85,7 +86,18 @@ public class UpServiceImpl implements UpService {
 
     @Override
     public String deleteUp(String token, Long id) {
-
-        return null;
+        try {
+            Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
+            if (usuarioRepository.existsById(Long.valueOf(jwtUtil.getId(token))) && u.isActivo() == true) {
+                UnidadProductora up = unidadProductoraRepository.findById(id).orElse(null);
+                if (up != null) {
+                    unidadProductoraRepository.delete(up);
+                    return "Success";
+                }
+            }
+        } catch (ExpiredJwtException e) {
+            return "Session expired";
+        }
+        return "Failed";
     }
 }

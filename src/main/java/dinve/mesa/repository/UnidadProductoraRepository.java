@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository("UnidadProductoraRepository")
 public interface UnidadProductoraRepository extends JpaRepository<UnidadProductora,Long> {
+
     @Query("select up from UnidadProductora up where up.nombre = ?1")
     UnidadProductora findByName(String name);
 
