@@ -110,6 +110,7 @@ public class Formulario5ADatos {
             pro.setGestion_programa(gestion_programa.get(i));
             pro.setEstudios_base_ioarr(estudios_base_ioarr.get(i));
             pro.setTotal(total.get(i));
+            lista.add(pro);
         }
         return lista;
     }
@@ -124,6 +125,7 @@ public class Formulario5ADatos {
             ProyectoDeInversion pro = new ProyectoDeInversion();
             pro.setId(id_proyecto.get(i));
             pro.setCosto(costo.get(i));
+            lista.add(pro);
         }
         return lista;
     }

@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,10 +30,10 @@ public class ProyectoDeInversion implements Serializable {
     private ResponsabilidadFuncionalDescripcionAgregada responsabilidad_funcional_descripcion_agregada;
 
     @OneToMany(mappedBy = "proyecto_de_inversion",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<TipoItem> ListaTipoItem;
+    private List<TipoItem> ListaTipoItem = new ArrayList<>();
 
     @OneToMany(mappedBy = "proyecto_de_inversion",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Capacidad> ListaCapacidad;
+    private List<Capacidad> ListaCapacidad = new ArrayList<>();
 
     public void addTipoItem(TipoItem tipoItem){
         ListaTipoItem.add(tipoItem);
