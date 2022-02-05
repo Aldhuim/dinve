@@ -12,7 +12,9 @@ import dinve.mesa.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -104,7 +106,11 @@ public class UserServiceImpl implements UserService {
             byte rol = jwtUtil.getRol(token);
             Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
             if( (rol== 1 || rol == 2) && (u.isActivo() == true) ) {
-                datos.put("Usuarios",usuarioRepository.findAll(pageable).getContent());
+                Page<Usuario> pageUsuario = usuarioRepository.findAll(pageable);
+                datos.put("Size",pageUsuario.getSize());
+                datos.put("TotalPaginas",pageUsuario.getTotalPages());
+                datos.put("TotalElementos",pageUsuario.getTotalElements());
+                datos.put("Usuarios",pageUsuario.getContent());
                 return datos;
             }
         }catch(ExpiredJwtException e){
@@ -112,4 +118,7 @@ public class UserServiceImpl implements UserService {
         }
         return datos;
     }
+
+
+
 }

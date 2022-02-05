@@ -11,6 +11,7 @@ import dinve.mesa.service.UpService;
 import dinve.mesa.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class UpServiceImpl implements UpService {
         this.usuarioRepository = usuarioRepository;
         this.unidadProductoraRepository = unidadProductoraRepository;
         this.jwtUtil = jwtUtil;
+
     }
 
     @Override
@@ -67,7 +69,13 @@ public class UpServiceImpl implements UpService {
             byte rol = jwtUtil.getRol(token);
             Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
             if( (rol== 1 || rol == 2) && (u.isActivo() == true) ) {
-                lista_up.put("Unidades productoras",unidadProductoraRepository.findAll(pageable).getContent());
+
+                Page<UnidadProductora> pageUP = unidadProductoraRepository.findAll(pageable);
+                lista_up.put("Size",pageUP.getSize());
+                lista_up.put("TotalPaginas",pageUP.getTotalPages());
+                lista_up.put("TotalElementos",pageUP.getTotalElements());
+                lista_up.put("Unidades productoras",pageUP.getContent());
+
                 return lista_up;
             } else {
                 lista_up.put("Message","No access");

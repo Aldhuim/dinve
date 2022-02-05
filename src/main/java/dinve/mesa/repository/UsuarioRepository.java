@@ -1,6 +1,5 @@
 package dinve.mesa.repository;
 
-import dinve.mesa.model.Formulario;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
 import org.springframework.data.domain.Page;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository("UsuarioRepository")
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
+
     @Query("select u from Usuario u where u.user = ?1")
     Usuario findByUser(String user);
 
@@ -19,4 +19,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
     @Query("select u from Usuario u")
     Page<Usuario> findAll(Pageable pageable);
+
+
+
 }

@@ -13,4 +13,5 @@ public interface UserService {
     Map<String,Object> login(Usuario usuario);
     String logout(Usuario usuario);
     Map<String,Object> findAll(String token, Pageable pageable);
+
 }
