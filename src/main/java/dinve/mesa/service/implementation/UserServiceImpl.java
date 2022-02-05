@@ -124,4 +124,53 @@ public class UserServiceImpl implements UserService {
         }
         return datos;
     }
+
+    @Override
+    public Map<String, Object> getUser(String token){
+        Map<String, Object> datos = new HashMap<>();
+        try{
+            String user = jwtUtil.getUser(token);
+            Usuario u = usuarioRepository.findByUser(user);
+            datos.put("usuario", u);
+            return datos;
+        }catch(ExpiredJwtException e){
+            datos.put("menssage", "Session expired");
+            return datos;
+        }
+    }
+
+    @Override
+    public String updateUser(String token, UsuarioDatos usuarioDatos){
+
+        return "update user!";
+    }
+
+    @Override
+    public String unableUser(String token, Long id_user){
+        try{
+            byte rol = jwtUtil.getRol(token);
+            Long id = Long.parseLong(jwtUtil.getId(token));
+            Usuario u = usuarioRepository.findByIdUser(id);
+            //Cuando un usuario que no sea admin se quiera deshabilitar a si mismo
+            if (id == id_user && rol != 2){
+                u.setActivo(false);
+                u.setRol(Byte.parseByte("-1"));
+                usuarioRepository.save(u);
+                //También se debe deshabilitar el token generado para este usuario
+                return "Se deshabilitó al usuario";
+            }
+            //Cuando un administrador quiere deshabilitar a un usuario
+            else if (id != id_user && rol == 2){
+                u.setActivo(false);
+                u.setRol(Byte.parseByte("-1"));
+                usuarioRepository.save(u);
+                return "Se deshabilitó al usuario";
+            }
+            else {
+                return "no se puede deshabilitar a este usuario";
+            }
+        }catch (ExpiredJwtException e){
+            return "Failed";
+        }
+    }
 }
