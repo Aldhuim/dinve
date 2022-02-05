@@ -16,6 +16,7 @@ import dinve.mesa.service.FormService;
 import dinve.mesa.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +81,11 @@ public class FormServiceImpl implements FormService {
             Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
 
             if((rol == 1 || rol == 2) && (u.isActivo() == true)) {
-                datos.put("AllForms",formularioRepository.findAll(pageable).getContent());
+                Page<Formulario> pageFormulario = formularioRepository.findAll(pageable);
+                datos.put("Size",pageFormulario.getSize());
+                datos.put("TotalPaginas",pageFormulario.getTotalPages());
+                datos.put("TotalElementos",pageFormulario.getTotalElements());
+                datos.put("AllForms",pageFormulario.getContent());
                 return datos;
             }
 
@@ -95,7 +100,14 @@ public class FormServiceImpl implements FormService {
         try {
             Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
             if(u.isActivo() == true) {
-                datos.put("MyForms", formularioRepository.findAllByUsuario(u, pageable).getContent());
+
+                Page<Formulario> pageFormulario = formularioRepository.findAllByUsuario(u, pageable);
+
+                datos.put("Size",pageFormulario.getSize());
+                datos.put("TotalPaginas",pageFormulario.getTotalPages());
+                datos.put("TotalElementos",pageFormulario.getTotalElements());
+                datos.put("MyForms",pageFormulario.getContent());
+
                 return datos;
             }
         }catch(ExpiredJwtException e){
@@ -109,7 +121,14 @@ public class FormServiceImpl implements FormService {
         try {
             Usuario u = usuarioRepository.findByUser(jwtUtil.getUser(token));
             if(u.isActivo() == true) {
-                datos.put("MyUPForms", formularioRepository.findAllByUnidadProductora(u, u.getUnidad_productora(), pageable).getContent());
+
+                Page<Formulario> pageFormulario = formularioRepository.findAllByUnidadProductora(u, u.getUnidad_productora(), pageable);
+
+                datos.put("Size",pageFormulario.getSize());
+                datos.put("TotalPaginas",pageFormulario.getTotalPages());
+                datos.put("TotalElementos",pageFormulario.getTotalElements());
+                datos.put("MyUPForms",pageFormulario.getContent());
+
                 return datos;
             }
         }catch(ExpiredJwtException e){

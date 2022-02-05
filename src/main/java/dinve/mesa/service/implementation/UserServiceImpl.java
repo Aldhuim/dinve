@@ -12,7 +12,9 @@ import dinve.mesa.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -110,61 +112,16 @@ public class UserServiceImpl implements UserService {
             byte rol = jwtUtil.getRol(token);
             Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
             if( (rol== 1 || rol == 2) && (u.isActivo() == true) ) {
-                datos.put("Usuarios",usuarioRepository.findAll(pageable).getContent());
+                Page<Usuario> pageUsuario = usuarioRepository.findAll(pageable);
+                datos.put("Size",pageUsuario.getSize());
+                datos.put("TotalPaginas",pageUsuario.getTotalPages());
+                datos.put("TotalElementos",pageUsuario.getTotalElements());
+                datos.put("Usuarios",pageUsuario.getContent());
                 return datos;
             }
         }catch(ExpiredJwtException e){
             datos.put("Message","Session expired");
         }
         return datos;
-    }
-
-    @Override
-    public Map<String, Object> getUser(String token){
-        Map<String, Object> datos = new HashMap<>();
-        try{
-            String user = jwtUtil.getUser(token);
-            Usuario u = usuarioRepository.findByUser(user);
-            datos.put("usuario", u);
-            return datos;
-        }catch(ExpiredJwtException e){
-            datos.put("menssage", "Session expired");
-            return datos;
-        }
-    }
-
-    @Override
-    public String updateUser(String token, UsuarioDatos usuarioDatos){
-
-        return "update user!";
-    }
-
-    @Override
-    public String unableUser(String token, Long id_user){
-        try{
-            byte rol = jwtUtil.getRol(token);
-            Long id = Long.parseLong(jwtUtil.getId(token));
-            Usuario u = usuarioRepository.findByIdUser(id);
-            //Cuando un usuario que no sea admin se quiera deshabilitar a si mismo
-            if (id == id_user && rol != 2){
-                u.setActivo(false);
-                u.setRol(Byte.parseByte("-1"));
-                usuarioRepository.save(u);
-                //También se debe deshabilitar el token generado para este usuario
-                return "Se deshabilitó al usuario";
-            }
-            //Cuando un administrador quiere deshabilitar a un usuario
-            else if (id != id_user && rol == 2){
-                u.setActivo(false);
-                u.setRol(Byte.parseByte("-1"));
-                usuarioRepository.save(u);
-                return "Se deshabilitó al usuario";
-            }
-            else {
-                return "no se puede deshabilitar a este usuario";
-            }
-        }catch (ExpiredJwtException e){
-            return "Failed";
-        }
     }
 }

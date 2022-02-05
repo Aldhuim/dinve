@@ -83,29 +83,9 @@ public class MainController {
     }
     //Probado
     @GetMapping(value="user/get/all")
-    public Map<String, Object> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
-        return userService.findAll(token,pageable);
+    public Map<String, Object> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable) {
+        return userService.findAll(token, pageable);
     }
-
-
-
-    //Probado
-    @GetMapping(value = "user/get")
-    public Map<String, Object> getUser(@RequestHeader(value = "Authorization") String token){
-        return userService.getUser(token);
-    }
-    //USA EL MISMO QUE EL SAVE
-    @PutMapping(value = "user/update")
-    public String updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody UsuarioDatos usuarioDatos){
-        return userService.save(token, usuarioDatos);
-    }
-    //Probado
-    @PutMapping(value = "user/unable")
-    public String unableUser(@RequestHeader(value = "Authorization") String token, @RequestHeader(value = "id") Long id_user){
-        return userService.unableUser(token, id_user);
-    }
-
-
 
     /*FORMULARIOS*/
     //Probado
