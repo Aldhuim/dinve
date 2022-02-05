@@ -92,10 +92,10 @@ public class MainController {
     public Map<String, Object> getUser(@RequestHeader(value = "Authorization") String token){
         return userService.getUser(token);
     }
-    //USA EL MISMO QUE EL SAVE
+    //Probado
     @PutMapping(value = "user/update")
     public String updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody UsuarioDatos usuarioDatos){
-        return userService.save(token, usuarioDatos);
+        return userService.updateUser(token, usuarioDatos);
     }
     //Probado
     @PutMapping(value = "user/unable")

@@ -141,8 +141,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String updateUser(String token, UsuarioDatos usuarioDatos){
-
-        return "update user!";
+        try{
+            byte rol = jwtUtil.getRol(token);
+            Usuario u = usuarioDatos.getUsuario();
+            if (usuarioRepository.findByIdUser(u.getId()) != null) {
+                try {
+                    u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
+                    UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
+                    u.setUnidad_productora(up);
+                    usuarioRepository.save(u);
+                    return "Success";
+                } catch (Exception ignored) {
+                    return "Excepcion";
+                }
+            }
+            return "Failed"; //Usuario ya registrado
+        }catch(ExpiredJwtException e){
+            return "Session expired";
+        }
     }
 
     @Override
