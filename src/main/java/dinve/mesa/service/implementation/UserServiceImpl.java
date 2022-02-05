@@ -61,12 +61,13 @@ public class UserServiceImpl implements UserService {
         }
         return "Not authorized"; //Rol no autorizado
     }
+
     @Override
     public Map<String,Object> login(Usuario usuario){
         Map<String,Object> datos = new HashMap<>();
         try{
             Usuario u = usuarioRepository.findByUser(usuario.getUser());
-            if(argon2.verify(u.getPassword(),usuario.getPassword())){
+            if(argon2.verify(u.getPassword(),usuario.getPassword()) && u.getRol() != -1){
                 if(!u.isActivo()){
                     u.setActivo(true);
                     usuarioRepository.save(u);
@@ -76,6 +77,9 @@ public class UserServiceImpl implements UserService {
                 u.setPassword(null);
                 datos.put("usuario",u);
                 return datos;
+            } else if (u.getRol() == -1){
+                datos.put("msg","Usuario deshabilitado, comunicarse con el administrador si cree que es un error");
+                return datos;
             }
             datos.put("msg","Contraseña incorrecta");
             return datos;
@@ -84,6 +88,7 @@ public class UserServiceImpl implements UserService {
         datos.put("msg","Usuario no registrado");
         return datos;
     }
+
     @Override
     public String logout(Usuario usuario){
         try{
@@ -97,6 +102,7 @@ public class UserServiceImpl implements UserService {
         }
         return "Failed";
     }
+
     @Override
     public Map<String,Object> findAll(String token,Pageable pageable){
         Map<String,Object> datos = new HashMap<>();
@@ -111,5 +117,54 @@ public class UserServiceImpl implements UserService {
             datos.put("Message","Session expired");
         }
         return datos;
+    }
+
+    @Override
+    public Map<String, Object> getUser(String token){
+        Map<String, Object> datos = new HashMap<>();
+        try{
+            String user = jwtUtil.getUser(token);
+            Usuario u = usuarioRepository.findByUser(user);
+            datos.put("usuario", u);
+            return datos;
+        }catch(ExpiredJwtException e){
+            datos.put("menssage", "Session expired");
+            return datos;
+        }
+    }
+
+    @Override
+    public String updateUser(String token, UsuarioDatos usuarioDatos){
+
+        return "update user!";
+    }
+
+    @Override
+    public String unableUser(String token, Long id_user){
+        try{
+            byte rol = jwtUtil.getRol(token);
+            Long id = Long.parseLong(jwtUtil.getId(token));
+            Usuario u = usuarioRepository.findByIdUser(id);
+            //Cuando un usuario que no sea admin se quiera deshabilitar a si mismo
+            if (id == id_user && rol != 2){
+                u.setActivo(false);
+                u.setRol(Byte.parseByte("-1"));
+                usuarioRepository.save(u);
+                //También se debe deshabilitar el token generado para este usuario
+                return "Se deshabilitó al usuario";
+            }
+            //Cuando un administrador quiere deshabilitar a un usuario
+            else if (id != id_user && rol == 2){
+                u.setActivo(false);
+                u.setRol(Byte.parseByte("-1"));
+                usuarioRepository.save(u);
+                return "Se deshabilitó al usuario";
+            }
+            else {
+                return "no se puede deshabilitar a este usuario";
+            }
+        }catch (ExpiredJwtException e){
+            return "Failed";
+        }
     }
 }

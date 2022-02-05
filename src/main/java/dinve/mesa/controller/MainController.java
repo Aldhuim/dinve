@@ -13,6 +13,7 @@ import dinve.mesa.service.UpService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class MainController {
         this.formService = formService;
         this.upService = upService;
     }
+    /*UNIDADES PRODUCTORAS*/
     //Probado
     @PostMapping(value = "up/create")
     public String create(@RequestHeader(value = "Authorization") String token,@RequestBody UnidadProductoraDatos unidadProductora){
@@ -57,6 +59,13 @@ public class MainController {
         return upService.deleteUp(token,id);
         //return null;
     }
+    //Para implementar
+    @GetMapping(value = "up/all")
+    public Map<String, Object> getAllUps(@RequestHeader(value = "Authorization") String token){
+        return upService.getAllUps(token);
+    }
+
+    /*USUARIOS*/
     //Probado
     @PostMapping(value="user/create")
     public String create(@RequestHeader(value = "Authorization") String token, @RequestBody UsuarioDatos usuarioDatos){
@@ -77,6 +86,28 @@ public class MainController {
     public Map<String, Object> getAllUsers(@RequestHeader(value = "Authorization") String token,Pageable pageable){
         return userService.findAll(token,pageable);
     }
+
+
+
+    //Probado
+    @GetMapping(value = "user/get")
+    public Map<String, Object> getUser(@RequestHeader(value = "Authorization") String token){
+        return userService.getUser(token);
+    }
+    //USA EL MISMO QUE EL SAVE
+    @PutMapping(value = "user/update")
+    public String updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody UsuarioDatos usuarioDatos){
+        return userService.save(token, usuarioDatos);
+    }
+    //Probado
+    @PutMapping(value = "user/unable")
+    public String unableUser(@RequestHeader(value = "Authorization") String token, @RequestHeader(value = "id") Long id_user){
+        return userService.unableUser(token, id_user);
+    }
+
+
+
+    /*FORMULARIOS*/
     //Probado
     @GetMapping(value="form/get/all")
     public Map<String, Object> getAllForms(@RequestHeader(value = "Authorization") String token,Pageable pageable){

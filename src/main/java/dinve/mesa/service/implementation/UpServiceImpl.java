@@ -100,4 +100,22 @@ public class UpServiceImpl implements UpService {
         }
         return "Failed";
     }
+
+    @Override
+    public Map<String, Object> getAllUps(String token){
+        Map<String, Object> lista_ups = new HashMap<>();
+        try{
+            byte rol = jwtUtil.getRol(token);
+            Usuario u = usuarioRepository.findById(Long.parseLong(jwtUtil.getId(token))).get();
+            if( (rol== 1 || rol == 2) && (u.isActivo() == true) ) {
+                lista_ups.put("Unidades productoras",unidadProductoraRepository.findAll());
+                return lista_ups;
+            } else {
+                lista_ups.put("Message","No access");
+            }
+            return null;
+        } catch (Exception e){
+            return null;
+        }
+    }
 }

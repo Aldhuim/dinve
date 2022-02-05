@@ -13,5 +13,5 @@ public interface UpService {
     Map<String, Object> getAllUp(String token, Pageable pageable);
     Map<String, Object> getUp(String token, Pageable pageable);
     String deleteUp(String token,Long id);
-
+    Map<String, Object> getAllUps(String token);
 }
