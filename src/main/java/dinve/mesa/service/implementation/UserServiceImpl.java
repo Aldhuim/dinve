@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
         try{
             byte rol = jwtUtil.getRol(token);
             Long id = Long.parseLong(jwtUtil.getId(token));
-            Usuario u = usuarioRepository.findByIdUser(id);
+            Usuario u = usuarioRepository.findByIdUser(id_user);
             //Cuando un usuario que no sea admin se quiera deshabilitar a si mismo
             if (id == id_user && rol != 2){
                 u.setActivo(false);
@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
                 return "Se deshabilitó al usuario";
             }
             //Cuando un administrador quiere deshabilitar a un usuario
-            else if (id != id_user && rol == 2){
+            if (id != id_user && rol == 2){
                 u.setActivo(false);
                 u.setRol(Byte.parseByte("-1"));
                 usuarioRepository.save(u);
@@ -184,6 +184,26 @@ public class UserServiceImpl implements UserService {
             }
             else {
                 return "no se puede deshabilitar a este usuario";
+            }
+        }catch (ExpiredJwtException e){
+            return "Failed";
+        }
+    }
+
+    @Override
+    public String enableUser(String token, Long id_user, String rol_usuario){
+        try{
+            byte rol = jwtUtil.getRol(token);
+            Long id = Long.parseLong(jwtUtil.getId(token));
+            Usuario u = usuarioRepository.findByIdUser(id_user);
+            //Solo los admins pueden habilitar a los usuarios deshabilitados
+            if (rol == 2){
+                u.setRol(Byte.parseByte(rol_usuario));
+                usuarioRepository.save(u);
+                return "Se habilitó al usuario con un rol nivel " + rol_usuario;
+            }
+            else {
+                return "no se puede habilitar a este usuario";
             }
         }catch (ExpiredJwtException e){
             return "Failed";

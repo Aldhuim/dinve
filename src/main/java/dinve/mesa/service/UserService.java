@@ -4,6 +4,7 @@ import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.Usuario;
 import org.springframework.data.domain.Pageable;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -16,4 +17,5 @@ public interface UserService {
     Map<String, Object> getUser(String token);
     String updateUser(String token, UsuarioDatos usuarioDatos);
     String unableUser(String token, Long id_user);
+    String enableUser(String token, Long id_user, String rol_usuario);
 }

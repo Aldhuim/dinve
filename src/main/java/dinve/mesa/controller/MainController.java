@@ -99,8 +99,14 @@ public class MainController {
     }
     //Probado
     @PutMapping(value = "user/unable")
-    public String unableUser(@RequestHeader(value = "Authorization") String token, @RequestHeader(value = "id") Long id_user){
+    public String unableUser(@RequestHeader(value = "Authorization") String token, @RequestParam(value = "id") Long id_user){
         return userService.unableUser(token, id_user);
+    }
+    @PutMapping(value = "user/enable")
+    public String enableUser(@RequestHeader(value = "Authorization") String token,
+                             @RequestParam(value = "id") Long id_user,
+                             @RequestParam(value = "rol") String rol){
+        return userService.enableUser(token, id_user, rol);
     }
 
     /*FORMULARIOS*/
