@@ -2,7 +2,6 @@ package dinve.mesa.service.implementation;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
-import dinve.mesa.converter.PasswordDatos;
 import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
@@ -15,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service("UserService")

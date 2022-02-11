@@ -1,12 +1,9 @@
 package dinve.mesa.service;
 
-import dinve.mesa.converter.PasswordDatos;
 import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.Usuario;
 import org.springframework.data.domain.Pageable;
 
-import java.awt.*;
-import java.util.List;
 import java.util.Map;
 
 
