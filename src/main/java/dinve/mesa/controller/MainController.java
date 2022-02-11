@@ -1,9 +1,6 @@
 package dinve.mesa.controller;
 
-import dinve.mesa.converter.Formulario5ADatos;
-import dinve.mesa.converter.Formulario5BDatos;
-import dinve.mesa.converter.UnidadProductoraDatos;
-import dinve.mesa.converter.UsuarioDatos;
+import dinve.mesa.converter.*;
 import dinve.mesa.model.Formulario;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
@@ -59,7 +56,7 @@ public class MainController {
         return upService.deleteUp(token,id);
         //return null;
     }
-    //Para implementar
+    //Probado
     @GetMapping(value = "up/all")
     public Map<String, Object> getAllUps(@RequestHeader(value = "Authorization") String token){
         return upService.getAllUps(token);
@@ -94,20 +91,29 @@ public class MainController {
     }
     //Probado
     @PutMapping(value = "user/update")
-    public String updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody UsuarioDatos usuarioDatos){
-        return userService.updateUser(token, usuarioDatos);
+    public String updateUser(@RequestHeader(value = "Authorization") String token,
+                             @RequestParam(value = "id_update") Long id_update,
+                             @RequestBody UsuarioDatos usuarioDatos){
+        return userService.updateUser(token, usuarioDatos, id_update);
     }
     //Probado
     @PutMapping(value = "user/unable")
     public String unableUser(@RequestHeader(value = "Authorization") String token, @RequestParam(value = "id") Long id_user){
         return userService.unableUser(token, id_user);
     }
+    //Probado
     @PutMapping(value = "user/enable")
     public String enableUser(@RequestHeader(value = "Authorization") String token,
                              @RequestParam(value = "id") Long id_user,
                              @RequestParam(value = "rol") String rol){
         return userService.enableUser(token, id_user, rol);
     }
+    /*FALTA IMPLEMENTAR
+    @PutMapping(value = "user/updatePassword")
+    public String updatePassword(@RequestHeader(value = "Authorization") String token,
+                                 @RequestBody PasswordDatos datos_pass){
+        return userService.updatePassword(token, datos_pass);
+    }*/
 
     /*FORMULARIOS*/
     //Probado

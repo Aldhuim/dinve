@@ -2,6 +2,7 @@ package dinve.mesa.service.implementation;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import dinve.mesa.converter.PasswordDatos;
 import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UnidadProductoraRepository unidadProductoraRepository;
     private final JWTUtil jwtUtil;
     private final Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+
 
     @Autowired
     public UserServiceImpl(UsuarioRepository usuarioRepository, UnidadProductoraRepository unidadProductoraRepository, JWTUtil jwtUtil){
@@ -128,9 +130,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> getUser(String token){
         Map<String, Object> datos = new HashMap<>();
+        String pass_decrypt;
         try{
             String user = jwtUtil.getUser(token);
             Usuario u = usuarioRepository.findByUser(user);
+            //Para la password
+            pass_decrypt = (u.getPassword());
+            System.out.println("PASS: " + pass_decrypt);
             datos.put("usuario", u);
             return datos;
         }catch(ExpiredJwtException e){
@@ -140,26 +146,69 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUser(String token, UsuarioDatos usuarioDatos){
+    public String updateUser(String token, UsuarioDatos usuarioDatos, Long id_update){
         try{
-            byte rol = jwtUtil.getRol(token);
-            Usuario u = usuarioDatos.getUsuario();
-            if (usuarioRepository.findByIdUser(u.getId()) != null) {
+            Long id_user_token = Long.parseLong(jwtUtil.getId(token));
+            Byte rol_token = jwtUtil.getRol(token);
+            Usuario u = usuarioRepository.getById(id_update);
+            if (id_user_token == id_update){
                 try {
-                    u.setPassword(argon2.hash(1, 1024, 1, u.getPassword()));
-                    UnidadProductora up = unidadProductoraRepository.getById(usuarioDatos.getId_unidad());
-                    u.setUnidad_productora(up);
+                    u.setUser(usuarioDatos.getUser());
+                    u.setNombre(usuarioDatos.getNombre());
+                    u.setApellido(usuarioDatos.getApellido());
                     usuarioRepository.save(u);
                     return "Success";
                 } catch (Exception ignored) {
                     return "Excepcion";
                 }
+            } else if(rol_token > usuarioRepository.getById(id_update).getRol()){
+                try {
+                    u.setUser(usuarioDatos.getUser());
+                    u.setNombre(usuarioDatos.getNombre());
+                    u.setApellido(usuarioDatos.getApellido());
+                    u.setDni(usuarioDatos.getDni());
+                    u.setCargo(usuarioDatos.getCargo());
+                    u.setUnidad_productora(unidadProductoraRepository.getById(usuarioDatos.getId_unidad()));
+                    if (usuarioDatos.getRol() < rol_token){
+                        u.setRol(usuarioDatos.getRol());
+                        usuarioRepository.save(u);
+                        return "Success";
+                    } else {
+                        usuarioRepository.save(u);
+                        return "Success, but you can't put the same level of rol as you";
+                    }
+                } catch (Exception ignored) {
+                    return "Excepcion";
+                }
             }
-            return "Failed"; //Usuario ya registrado
+            else {
+                return "No puedes editar al usuario con id " + id_update;
+            }
         }catch(ExpiredJwtException e){
             return "Session expired";
         }
     }
+
+    /*
+    @Override
+    public String updatePassword(String token, PasswordDatos passwordDatos){
+        try{
+            Usuario u = usuarioRepository.findByIdUser(Long.parseLong(jwtUtil.getId(token)));
+            //String actual_pass_hash = argon2.hash(1, 1024, 1, passwordDatos.getActual_password());
+            String new_pass_hash = argon2.hash(1, 1024, 1, passwordDatos.getNew_password());
+            String confirm_new_pass_hash = argon2.hash(1, 1024, 1, passwordDatos.getConfirm_password());
+            //System.out.println(u.getPassword());
+            //System.out.println(actual_pass_hash);
+            if (argon2.verify(passwordDatos.getActual_password(),u.getPassword())) {
+                return "Contraseña actual correcta";
+            } else {
+                return "Contraseña actual incorrecta";
+            }
+        } catch (ExpiredJwtException e) {
+            return "Failed";
+        }
+    }
+    */
 
     @Override
     public String unableUser(String token, Long id_user){
