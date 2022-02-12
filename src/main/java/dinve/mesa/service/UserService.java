@@ -1,5 +1,6 @@
 package dinve.mesa.service;
 
+import dinve.mesa.converter.PasswordDatos;
 import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.Usuario;
 import org.springframework.data.domain.Pageable;
@@ -16,5 +17,5 @@ public interface UserService {
     String updateUser(String token, UsuarioDatos usuarioDatos, Long id_update);
     String unableUser(String token, Long id_user);
     String enableUser(String token, Long id_user, String rol_usuario);
-    //String updatePassword(String token, PasswordDatos datos_pass);
+    String updatePassword(String token, PasswordDatos datos_pass);
 }

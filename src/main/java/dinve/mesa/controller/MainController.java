@@ -108,12 +108,12 @@ public class MainController {
                              @RequestParam(value = "rol") String rol){
         return userService.enableUser(token, id_user, rol);
     }
-    /*FALTA IMPLEMENTAR
+    //En pruebas
     @PutMapping(value = "user/updatePassword")
     public String updatePassword(@RequestHeader(value = "Authorization") String token,
                                  @RequestBody PasswordDatos datos_pass){
         return userService.updatePassword(token, datos_pass);
-    }*/
+    }
 
     /*FORMULARIOS*/
     //Probado

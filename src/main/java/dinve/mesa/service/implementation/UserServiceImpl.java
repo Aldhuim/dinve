@@ -2,6 +2,7 @@ package dinve.mesa.service.implementation;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import dinve.mesa.converter.PasswordDatos;
 import dinve.mesa.converter.UsuarioDatos;
 import dinve.mesa.model.UnidadProductora;
 import dinve.mesa.model.Usuario;
@@ -186,18 +187,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*
     @Override
     public String updatePassword(String token, PasswordDatos passwordDatos){
         try{
             Usuario u = usuarioRepository.findByIdUser(Long.parseLong(jwtUtil.getId(token)));
-            //String actual_pass_hash = argon2.hash(1, 1024, 1, passwordDatos.getActual_password());
-            String new_pass_hash = argon2.hash(1, 1024, 1, passwordDatos.getNew_password());
-            String confirm_new_pass_hash = argon2.hash(1, 1024, 1, passwordDatos.getConfirm_password());
-            //System.out.println(u.getPassword());
-            //System.out.println(actual_pass_hash);
-            if (argon2.verify(passwordDatos.getActual_password(),u.getPassword())) {
-                return "Contraseña actual correcta";
+            if (argon2.verify(u.getPassword(), passwordDatos.getActual_pass())) {
+                //Contraseña actual coincide
+                if (passwordDatos.getNew_pass().equals(passwordDatos.getConfirm_pass())) {
+                    u.setPassword(argon2.hash(1, 1024, 1, passwordDatos.getNew_pass()));
+                    usuarioRepository.save(u);
+                    return "Contraseña actualizada: " + passwordDatos.getNew_pass();
+                } else {
+                    return "Contraseña nueva y confimar contraseña no coinciden";
+                }
             } else {
                 return "Contraseña actual incorrecta";
             }
@@ -205,7 +207,6 @@ public class UserServiceImpl implements UserService {
             return "Failed";
         }
     }
-    */
 
     @Override
     public String unableUser(String token, Long id_user){
