@@ -471,14 +471,21 @@
         });
       }
 
-      // Gallery data -> rendered cards.
+      // ============================================================
+      //  CONTENIDO EDITABLE DE LA GALERÍA
+      //  Para agregar/cambiar productos: edita esta lista.
+      //  Para usar una FOTO real, agrega el campo "img" con la ruta:
+      //    img: 'images/girasoles.jpg'   (foto en la carpeta /images)
+      //    img: 'https://.../foto.jpg'   (o una URL de internet)
+      //  Si NO pones "img", se muestra la flor dibujada (colores c1/c2).
+      // ============================================================
       var products = [
-        { title: 'Ramo de Girasoles',   tag: 'Best seller', c1: '#F4C430', c2: '#7C5A2E', bg: 'from-yellow-100 to-peach/60' },
-        { title: 'Rosas Pastel',        tag: 'Romántico',   c1: '#E8A0BF', c2: '#E07A5F', bg: 'from-pink-100 to-cream' },
-        { title: 'Manojo de Lavanda',   tag: 'Relajante',   c1: '#9B8AC4', c2: '#7C9082', bg: 'from-purple-100 to-sage-100' },
-        { title: 'Tulipanes de Primavera', tag: 'Alegre',   c1: '#E07A5F', c2: '#F2C7B6', bg: 'from-orange-100 to-cream' },
-        { title: 'Bouquet Silvestre',   tag: 'Personalizado', c1: '#7C9082', c2: '#E07A5F', bg: 'from-sage-100 to-peach/50' },
-        { title: 'Caja de Margaritas',  tag: 'Elegante',    c1: '#FAF9F6', c2: '#F4C430', bg: 'from-cream to-sage-100' }
+        { title: 'Ramo de Girasoles',   tag: 'Best seller', img: '', c1: '#F4C430', c2: '#7C5A2E', bg: 'from-yellow-100 to-peach/60' },
+        { title: 'Rosas Pastel',        tag: 'Romántico',   img: '', c1: '#E8A0BF', c2: '#E07A5F', bg: 'from-pink-100 to-cream' },
+        { title: 'Manojo de Lavanda',   tag: 'Relajante',   img: '', c1: '#9B8AC4', c2: '#7C9082', bg: 'from-purple-100 to-sage-100' },
+        { title: 'Tulipanes de Primavera', tag: 'Alegre',   img: '', c1: '#E07A5F', c2: '#F2C7B6', bg: 'from-orange-100 to-cream' },
+        { title: 'Bouquet Silvestre',   tag: 'Personalizado', img: '', c1: '#7C9082', c2: '#E07A5F', bg: 'from-sage-100 to-peach/50' },
+        { title: 'Caja de Margaritas',  tag: 'Elegante',    img: '', c1: '#FAF9F6', c2: '#F4C430', bg: 'from-cream to-sage-100' }
       ];
 
       function flowerSVG(c1, c2) {
@@ -494,6 +501,18 @@
           '</svg>';
       }
 
+      // Muestra una foto real si "img" tiene valor; si no (o si la foto falla
+      // al cargar), muestra la flor dibujada como respaldo.
+      function cardMedia(p) {
+        if (p.img) {
+          return '<img src="' + p.img + '" alt="' + p.title + '" loading="lazy" ' +
+            'class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" ' +
+            'onerror="this.outerHTML=window.__flowerSVG(\'' + p.c1 + '\',\'' + p.c2 + '\')">';
+        }
+        return flowerSVG(p.c1, p.c2);
+      }
+      window.__flowerSVG = flowerSVG;
+
       var grid = document.getElementById('galleryGrid');
       if (grid) {
         products.forEach(function (p, i) {
@@ -502,8 +521,8 @@
           card.style.transitionDelay = (i * 60) + 'ms';
           card.innerHTML =
             '<div class="relative aspect-[4/3] bg-gradient-to-br ' + p.bg + ' flex items-center justify-center overflow-hidden">' +
-              '<span class="absolute top-3 left-3 rounded-full bg-white/85 backdrop-blur px-3 py-1 text-xs font-600 text-sage-700 shadow-sm">' + p.tag + '</span>' +
-              flowerSVG(p.c1, p.c2) +
+              '<span class="absolute top-3 left-3 z-10 rounded-full bg-white/85 backdrop-blur px-3 py-1 text-xs font-600 text-sage-700 shadow-sm">' + p.tag + '</span>' +
+              cardMedia(p) +
             '</div>' +
             '<div class="p-5 flex items-center justify-between gap-3">' +
               '<div>' +
