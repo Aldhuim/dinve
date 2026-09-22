@@ -155,17 +155,17 @@
       <div class="animate-fadeUp">
         <span class="inline-flex items-center gap-2 rounded-full bg-sage-100 text-sage-700 px-4 py-1.5 text-xs md:text-sm font-500">
           <span class="h-2 w-2 rounded-full bg-terracotta"></span>
-          Hechas a mano en Perú · Duran para siempre
+          <span id="heroBadge">Hechas a mano en Perú · Duran para siempre</span>
         </span>
         <h1 class="mt-5 font-display text-4xl sm:text-5xl lg:text-6xl font-700 leading-[1.05] text-sage-800">
-          Flores de Limpiapipas <span class="text-terracotta">Hechas a Mano</span> Que Duran Para Siempre.
+          <span id="heroTitlePre">Flores de Limpiapipas </span><span class="text-terracotta" id="heroTitleHi">Hechas a Mano</span><span id="heroTitlePost"> Que Duran Para Siempre.</span>
         </h1>
-        <p class="mt-5 text-base md:text-lg text-sage-600 max-w-xl leading-relaxed">
+        <p id="heroSubtitle" class="mt-5 text-base md:text-lg text-sage-600 max-w-xl leading-relaxed">
           Arreglos florales únicos y eternos, creados con amor para cada ocasión especial.
         </p>
         <div class="mt-8 flex flex-col sm:flex-row gap-3">
           <a href="#" data-wa class="inline-flex items-center justify-center gap-2 rounded-full bg-terracotta px-7 py-4 text-base font-600 text-white shadow-soft hover:brightness-105 active:scale-95 transition">
-            Encarga tu Ramo Personalizado
+            <span id="heroCta">Encarga tu Ramo Personalizado</span>
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a href="#galeria" class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-600 text-sage-700 ring-1 ring-sage-200 hover:bg-sage-50 active:scale-95 transition">
@@ -258,7 +258,7 @@
           <span class="font-600 text-sage-800">Creando actualmente:</span>
           <span id="activeOrders" class="font-700 text-terracotta">3</span> Pedidos Personalizados
         </p>
-        <p class="mt-1 text-sm text-sage-500">(Cupos abiertos para la próxima semana)</p>
+        <p id="studioNote" class="mt-1 text-sm text-sage-500">(Cupos abiertos para la próxima semana)</p>
         <div class="mt-5 flex flex-wrap gap-2">
           <span class="rounded-full bg-sage-100 text-sage-700 px-3 py-1 text-xs font-500">✿ Bodas</span>
           <span class="rounded-full bg-sage-100 text-sage-700 px-3 py-1 text-xs font-500">✿ Cumpleaños</span>
@@ -272,15 +272,15 @@
           <h3 class="font-display text-xl font-700 text-sage-800">Lote Limitado</h3>
           <span class="rounded-full bg-terracotta/10 text-terracotta px-3 py-1 text-xs font-600 uppercase tracking-wide">Urgente</span>
         </div>
-        <p class="mt-4 text-sage-700 font-500">Lote de Graduación</p>
+        <p id="batchTitle" class="mt-4 text-sage-700 font-500">Lote de Graduación</p>
         <div class="mt-3 flex items-center justify-between text-sm">
           <span class="text-sage-600">Cupos reservados</span>
-          <span class="font-600 text-sage-800"><span id="batchTaken">6</span>/10</span>
+          <span class="font-600 text-sage-800"><span id="batchTaken">6</span>/<span id="batchTotal">10</span></span>
         </div>
         <div class="mt-2 h-3 w-full rounded-full bg-sage-100 overflow-hidden">
           <div id="batchBar" class="progress-fill h-full rounded-full bg-gradient-to-r from-terracotta-400 to-terracotta-600" style="width:0%"></div>
         </div>
-        <p class="mt-3 text-sm font-600 text-terracotta"><span id="batchLeft">4</span> de 10 Cupos Restantes</p>
+        <p class="mt-3 text-sm font-600 text-terracotta"><span id="batchLeft">4</span> de <span id="batchTotal2">10</span> Cupos Restantes</p>
         <a href="#" data-wa class="mt-5 inline-flex items-center justify-center gap-2 w-full rounded-full bg-whatsapp px-5 py-3 font-600 text-white shadow-soft hover:brightness-105 active:scale-95 transition">
           Reservar mi cupo ahora
         </a>
@@ -332,13 +332,13 @@
     <div class="max-w-6xl mx-auto px-5 sm:px-8 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
       <div class="reveal order-2 md:order-1">
         <span class="text-sm font-600 uppercase tracking-[0.2em] text-terracotta">Sobre Mí</span>
-        <h2 class="mt-2 font-display text-3xl md:text-4xl font-700 text-sage-800">Hecho con manos, corazón y paciencia</h2>
-        <p class="mt-4 text-sage-600 leading-relaxed">
+        <h2 id="aboutTitle" class="mt-2 font-display text-3xl md:text-4xl font-700 text-sage-800">Hecho con manos, corazón y paciencia</h2>
+        <p id="aboutText" class="mt-4 text-sage-600 leading-relaxed">
           Soy la creadora detrás de <span class="font-600 text-sage-800">Creaciones Florales Flora</span>. Cada flor
           nace de limpiapipas cuidadosamente torcidos, uno a uno, para dar vida a arreglos que nunca se marchitan.
           Lo que empezó como un pasatiempo hoy es mi forma de llevar alegría duradera a hogares y ocasiones especiales.
         </p>
-        <ul class="mt-6 space-y-3 text-sage-700">
+        <ul id="aboutBullets" class="mt-6 space-y-3 text-sage-700">
           <li class="flex items-start gap-3"><span class="mt-1 text-terracotta">✿</span> Materiales de alta calidad, seguros y sin alérgenos.</li>
           <li class="flex items-start gap-3"><span class="mt-1 text-terracotta">✿</span> Diseños 100% personalizables en color y estilo.</li>
           <li class="flex items-start gap-3"><span class="mt-1 text-terracotta">✿</span> Empaque cuidado, ideal para regalar.</li>
@@ -435,14 +435,16 @@
     (function () {
       'use strict';
 
-      // Central WhatsApp link — used by every [data-wa] element.
-      var WHATSAPP_URL = 'https://wa.me/51900000000?text=' +
-        encodeURIComponent('¡Hola! Vi su página web y me interesa encargar un arreglo floral.');
-      document.querySelectorAll('[data-wa]').forEach(function (el) {
-        el.setAttribute('href', WHATSAPP_URL);
-        el.setAttribute('target', '_blank');
-        el.setAttribute('rel', 'noopener');
-      });
+      // WhatsApp link — applied to every [data-wa] element (updated from content).
+      var WHATSAPP_URL = '';
+      function applyWhatsapp(phone, message) {
+        WHATSAPP_URL = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
+        document.querySelectorAll('[data-wa]').forEach(function (el) {
+          el.setAttribute('href', WHATSAPP_URL);
+          el.setAttribute('target', '_blank');
+          el.setAttribute('rel', 'noopener');
+        });
+      }
 
       // Current year in footer.
       var y = document.getElementById('year');
@@ -472,21 +474,24 @@
       }
 
       // ============================================================
-      //  CONTENIDO EDITABLE DE LA GALERÍA
-      //  Para agregar/cambiar productos: edita esta lista.
-      //  Para usar una FOTO real, agrega el campo "img" con la ruta:
-      //    img: 'images/girasoles.jpg'   (foto en la carpeta /images)
-      //    img: 'https://.../foto.jpg'   (o una URL de internet)
-      //  Si NO pones "img", se muestra la flor dibujada (colores c1/c2).
+      //  CONTENIDO DEL SITIO
+      //  El panel de administración en /admin (Decap CMS) edita el archivo
+      //  content/site.json y la página se actualiza sola al recargar.
+      //  Estos valores por defecto se usan solo como respaldo si el JSON no
+      //  se puede leer (por ejemplo al abrir el archivo sin un servidor).
       // ============================================================
-      var products = [
-        { title: 'Ramo de Girasoles',   tag: 'Best seller', img: '', c1: '#F4C430', c2: '#7C5A2E', bg: 'from-yellow-100 to-peach/60' },
-        { title: 'Rosas Pastel',        tag: 'Romántico',   img: '', c1: '#E8A0BF', c2: '#E07A5F', bg: 'from-pink-100 to-cream' },
-        { title: 'Manojo de Lavanda',   tag: 'Relajante',   img: '', c1: '#9B8AC4', c2: '#7C9082', bg: 'from-purple-100 to-sage-100' },
-        { title: 'Tulipanes de Primavera', tag: 'Alegre',   img: '', c1: '#E07A5F', c2: '#F2C7B6', bg: 'from-orange-100 to-cream' },
-        { title: 'Bouquet Silvestre',   tag: 'Personalizado', img: '', c1: '#7C9082', c2: '#E07A5F', bg: 'from-sage-100 to-peach/50' },
-        { title: 'Caja de Margaritas',  tag: 'Elegante',    img: '', c1: '#FAF9F6', c2: '#F4C430', bg: 'from-cream to-sage-100' }
-      ];
+      var DEFAULT_CONTENT = {
+        whatsapp: { phone: '51900000000', message: '¡Hola! Vi su página web y me interesa encargar un arreglo floral.' },
+        hero: {}, studio: {}, batch: {}, about: {},
+        gallery: [
+          { title: 'Ramo de Girasoles', tag: 'Best seller', image: '', c1: '#F4C430', c2: '#7C5A2E', bg: 'from-yellow-100 to-peach/60' },
+          { title: 'Rosas Pastel', tag: 'Romántico', image: '', c1: '#E8A0BF', c2: '#E07A5F', bg: 'from-pink-100 to-cream' },
+          { title: 'Manojo de Lavanda', tag: 'Relajante', image: '', c1: '#9B8AC4', c2: '#7C9082', bg: 'from-purple-100 to-sage-100' },
+          { title: 'Tulipanes de Primavera', tag: 'Alegre', image: '', c1: '#E07A5F', c2: '#F2C7B6', bg: 'from-orange-100 to-cream' },
+          { title: 'Bouquet Silvestre', tag: 'Personalizado', image: '', c1: '#7C9082', c2: '#E07A5F', bg: 'from-sage-100 to-peach/50' },
+          { title: 'Caja de Margaritas', tag: 'Elegante', image: '', c1: '#FAF9F6', c2: '#F4C430', bg: 'from-cream to-sage-100' }
+        ]
+      };
 
       function flowerSVG(c1, c2) {
         return '' +
@@ -500,36 +505,45 @@
             '</g>' +
           '</svg>';
       }
-
-      // Muestra una foto real si "img" tiene valor; si no (o si la foto falla
-      // al cargar), muestra la flor dibujada como respaldo.
-      function cardMedia(p) {
-        if (p.img) {
-          return '<img src="' + p.img + '" alt="' + p.title + '" loading="lazy" ' +
-            'class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" ' +
-            'onerror="this.outerHTML=window.__flowerSVG(\'' + p.c1 + '\',\'' + p.c2 + '\')">';
-        }
-        return flowerSVG(p.c1, p.c2);
-      }
       window.__flowerSVG = flowerSVG;
 
-      var grid = document.getElementById('galleryGrid');
-      if (grid) {
-        products.forEach(function (p, i) {
+      // Muestra una foto real si "image" tiene valor; si no (o si la foto
+      // falla al cargar), muestra la flor dibujada como respaldo.
+      function cardMedia(p) {
+        var img = p.image || p.img || '';
+        var c1 = p.c1 || '#7C9082', c2 = p.c2 || '#E07A5F';
+        if (img) {
+          return '<img src="' + img + '" alt="' + (p.title || '') + '" loading="lazy" ' +
+            'class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" ' +
+            'onerror="this.outerHTML=window.__flowerSVG(\'' + c1 + '\',\'' + c2 + '\')">';
+        }
+        return flowerSVG(c1, c2);
+      }
+
+      function setText(id, val) {
+        var el = document.getElementById(id);
+        if (el != null && val != null && val !== '') el.textContent = val;
+      }
+
+      function renderGallery(items) {
+        var grid = document.getElementById('galleryGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        items.forEach(function (p, i) {
           var card = document.createElement('article');
           card.className = 'reveal group rounded-xl bg-white shadow-soft ring-1 ring-sage-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300';
           card.style.transitionDelay = (i * 60) + 'ms';
           card.innerHTML =
-            '<div class="relative aspect-[4/3] bg-gradient-to-br ' + p.bg + ' flex items-center justify-center overflow-hidden">' +
-              '<span class="absolute top-3 left-3 z-10 rounded-full bg-white/85 backdrop-blur px-3 py-1 text-xs font-600 text-sage-700 shadow-sm">' + p.tag + '</span>' +
+            '<div class="relative aspect-[4/3] bg-gradient-to-br ' + (p.bg || 'from-sage-100 to-peach/50') + ' flex items-center justify-center overflow-hidden">' +
+              '<span class="absolute top-3 left-3 z-10 rounded-full bg-white/85 backdrop-blur px-3 py-1 text-xs font-600 text-sage-700 shadow-sm">' + (p.tag || '') + '</span>' +
               cardMedia(p) +
             '</div>' +
             '<div class="p-5 flex items-center justify-between gap-3">' +
               '<div>' +
-                '<h3 class="font-display text-lg font-600 text-sage-800">' + p.title + '</h3>' +
+                '<h3 class="font-display text-lg font-600 text-sage-800">' + (p.title || '') + '</h3>' +
                 '<p class="text-sm text-sage-500">Hecho a mano · Eterno</p>' +
               '</div>' +
-              '<a href="' + WHATSAPP_URL + '" target="_blank" rel="noopener" aria-label="Pedir ' + p.title + ' por WhatsApp" ' +
+              '<a href="' + WHATSAPP_URL + '" target="_blank" rel="noopener" aria-label="Pedir ' + (p.title || '') + ' por WhatsApp" ' +
                 'class="shrink-0 inline-flex h-10 w-10 items-center justify-center rounded-full bg-whatsapp text-white shadow-soft hover:brightness-105 active:scale-95 transition">' +
                 '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24z"/></svg>' +
               '</a>' +
@@ -538,38 +552,97 @@
         });
       }
 
-      // Reveal-on-scroll using IntersectionObserver.
-      var reveals = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in');
-              io.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.12 });
-        reveals.forEach(function (r) { io.observe(r); });
-      } else {
-        reveals.forEach(function (r) { r.classList.add('in'); });
+      // Reveal-on-scroll (runs after gallery cards are rendered).
+      function setupReveal() {
+        var reveals = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+            });
+          }, { threshold: 0.12 });
+          reveals.forEach(function (r) { io.observe(r); });
+        } else {
+          reveals.forEach(function (r) { r.classList.add('in'); });
+        }
       }
 
       // Animate the limited-batch progress bar when it enters the viewport.
-      var batchBar = document.getElementById('batchBar');
-      var TAKEN = 6, TOTAL = 10;
-      document.getElementById('batchTaken').textContent = TAKEN;
-      document.getElementById('batchLeft').textContent = (TOTAL - TAKEN);
-      function fillBar() { if (batchBar) batchBar.style.width = (TAKEN / TOTAL * 100) + '%'; }
-      if (batchBar && 'IntersectionObserver' in window) {
-        var barIO = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) { fillBar(); barIO.unobserve(entry.target); }
-          });
-        }, { threshold: 0.4 });
-        barIO.observe(batchBar);
-      } else {
-        fillBar();
+      function animateBatch() {
+        var batchBar = document.getElementById('batchBar');
+        if (!batchBar) return;
+        var taken = parseInt(batchBar.getAttribute('data-taken'), 10) || 0;
+        var total = parseInt(batchBar.getAttribute('data-total'), 10) || 0;
+        function fill() { batchBar.style.width = (total ? (taken / total * 100) : 0) + '%'; }
+        if ('IntersectionObserver' in window) {
+          var barIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) { if (entry.isIntersecting) { fill(); barIO.unobserve(entry.target); } });
+          }, { threshold: 0.4 });
+          barIO.observe(batchBar);
+        } else {
+          fill();
+        }
       }
+
+      // Populate the page from a content object.
+      function applyContent(data) {
+        data = data || {};
+        var wa = data.whatsapp || DEFAULT_CONTENT.whatsapp;
+        applyWhatsapp(wa.phone || DEFAULT_CONTENT.whatsapp.phone, wa.message || DEFAULT_CONTENT.whatsapp.message);
+
+        var h = data.hero || {};
+        setText('heroBadge', h.badge);
+        setText('heroTitlePre', h.title_pre);
+        setText('heroTitleHi', h.title_highlight);
+        setText('heroTitlePost', h.title_post);
+        setText('heroSubtitle', h.subtitle);
+        setText('heroCta', h.cta);
+
+        var s = data.studio || {};
+        setText('activeOrders', s.active_orders);
+        setText('studioNote', s.note);
+
+        var b = data.batch || {};
+        setText('batchTitle', b.title);
+        var taken = (b.taken != null) ? b.taken : 6;
+        var total = (b.total != null) ? b.total : 10;
+        setText('batchTaken', taken);
+        setText('batchTotal', total);
+        setText('batchTotal2', total);
+        setText('batchLeft', Math.max(0, total - taken));
+        var bar = document.getElementById('batchBar');
+        if (bar) { bar.setAttribute('data-taken', taken); bar.setAttribute('data-total', total); }
+
+        var a = data.about || {};
+        setText('aboutTitle', a.title);
+        setText('aboutText', a.text);
+        if (a.bullets && a.bullets.length) {
+          var ul = document.getElementById('aboutBullets');
+          if (ul) {
+            ul.innerHTML = '';
+            a.bullets.forEach(function (item) {
+              var li = document.createElement('li');
+              li.className = 'flex items-start gap-3';
+              li.innerHTML = '<span class="mt-1 text-terracotta">✿</span> <span></span>';
+              li.lastChild.textContent = item;
+              ul.appendChild(li);
+            });
+          }
+        }
+
+        var gallery = (data.gallery && data.gallery.length) ? data.gallery : DEFAULT_CONTENT.gallery;
+        renderGallery(gallery);
+
+        setupReveal();
+        animateBatch();
+      }
+
+      // Load editable content, then render. Falls back to defaults if the
+      // JSON can't be fetched (e.g. opened via file://).
+      fetch('content/site.json', { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('no content'); return r.json(); })
+        .then(function (data) { applyContent(data); })
+        .catch(function () { applyContent(DEFAULT_CONTENT); });
     })();
   </script>
 </body>

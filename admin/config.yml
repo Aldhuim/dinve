@@ -1,0 +1,94 @@
+# Configuración de Decap CMS
+# Documentación: https://decapcms.org/docs/
+
+# ── Backend (dónde se guardan los cambios) ──────────────────────────────
+# Producción: guarda los cambios como commits en el repositorio de GitHub.
+backend:
+  name: github
+  repo: Aldhuim/dinve                 # usuario/repositorio en GitHub
+  branch: main                        # rama donde se guardan los cambios
+
+# Permite EDITAR EN LOCAL sin autenticación usando un servidor de prueba:
+#   1) npx decap-server         (deja esta terminal abierta)
+#   2) abre http://localhost:PUERTO/admin/  y pulsa "Login"
+local_backend: true
+
+# ── Subida de imágenes ──────────────────────────────────────────────────
+media_folder: "images"        # dónde se guardan los archivos subidos
+public_folder: "/images"      # ruta pública con la que se referencian
+
+# Mensaje de commit al guardar desde el panel
+backend_commit_messages:
+  update: 'CMS: actualiza {{collection}} “{{slug}}”'
+  uploadMedia: 'CMS: sube imagen “{{path}}”'
+  deleteMedia: 'CMS: elimina imagen “{{path}}”'
+
+# ── Contenido editable ──────────────────────────────────────────────────
+collections:
+  - name: "sitio"
+    label: "Contenido del sitio"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "principal"
+        label: "Página principal"
+        file: "content/site.json"
+        format: json
+        fields:
+          - label: "WhatsApp"
+            name: "whatsapp"
+            widget: "object"
+            fields:
+              - { label: "Número (solo dígitos, con país)", name: "phone", widget: "string", hint: "Ej: 51900000000" }
+              - { label: "Mensaje predeterminado", name: "message", widget: "text" }
+
+          - label: "Portada (Hero)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Etiqueta pequeña", name: "badge", widget: "string" }
+              - { label: "Título — parte 1", name: "title_pre", widget: "string" }
+              - { label: "Título — palabra destacada", name: "title_highlight", widget: "string" }
+              - { label: "Título — parte final", name: "title_post", widget: "string" }
+              - { label: "Subtítulo", name: "subtitle", widget: "text" }
+              - { label: "Texto del botón principal", name: "cta", widget: "string" }
+
+          - label: "Estado del Taller"
+            name: "studio"
+            widget: "object"
+            fields:
+              - { label: "Pedidos en curso", name: "active_orders", widget: "number", value_type: "int", min: 0 }
+              - { label: "Nota", name: "note", widget: "string" }
+
+          - label: "Lote Limitado"
+            name: "batch"
+            widget: "object"
+            fields:
+              - { label: "Nombre del lote", name: "title", widget: "string" }
+              - { label: "Cupos reservados", name: "taken", widget: "number", value_type: "int", min: 0 }
+              - { label: "Cupos totales", name: "total", widget: "number", value_type: "int", min: 1 }
+
+          - label: "Sobre Mí"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Texto", name: "text", widget: "text" }
+              - label: "Puntos"
+                name: "bullets"
+                widget: "list"
+                field: { label: "Punto", name: "item", widget: "string" }
+
+          - label: "Galería de productos"
+            name: "gallery"
+            widget: "list"
+            label_singular: "Producto"
+            summary: "{{fields.title}} — {{fields.tag}}"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Etiqueta", name: "tag", widget: "string" }
+              - { label: "Foto (opcional)", name: "image", widget: "image", required: false, hint: "Si la dejas vacía se muestra la flor dibujada." }
+              - { label: "Color flor (centro→pétalos) 1", name: "c1", widget: "string", required: false, default: "#7C9082", hint: "Solo se usa si no hay foto." }
+              - { label: "Color flor (centro) 2", name: "c2", widget: "string", required: false, default: "#E07A5F", hint: "Solo se usa si no hay foto." }
+              - { label: "Fondo (clases Tailwind)", name: "bg", widget: "string", required: false, default: "from-sage-100 to-peach/50" }

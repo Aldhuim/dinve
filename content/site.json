@@ -1,0 +1,40 @@
+{
+  "whatsapp": {
+    "phone": "51900000000",
+    "message": "¡Hola! Vi su página web y me interesa encargar un arreglo floral."
+  },
+  "hero": {
+    "badge": "Hechas a mano en Perú · Duran para siempre",
+    "title_pre": "Flores de Limpiapipas ",
+    "title_highlight": "Hechas a Mano",
+    "title_post": " Que Duran Para Siempre.",
+    "subtitle": "Arreglos florales únicos y eternos, creados con amor para cada ocasión especial.",
+    "cta": "Encarga tu Ramo Personalizado"
+  },
+  "studio": {
+    "active_orders": 3,
+    "note": "(Cupos abiertos para la próxima semana)"
+  },
+  "batch": {
+    "title": "Lote de Graduación",
+    "taken": 6,
+    "total": 10
+  },
+  "about": {
+    "title": "Hecho con manos, corazón y paciencia",
+    "text": "Soy la creadora detrás de Creaciones Florales Flora. Cada flor nace de limpiapipas cuidadosamente torcidos, uno a uno, para dar vida a arreglos que nunca se marchitan. Lo que empezó como un pasatiempo hoy es mi forma de llevar alegría duradera a hogares y ocasiones especiales.",
+    "bullets": [
+      "Materiales de alta calidad, seguros y sin alérgenos.",
+      "Diseños 100% personalizables en color y estilo.",
+      "Empaque cuidado, ideal para regalar."
+    ]
+  },
+  "gallery": [
+    { "title": "Ramo de Girasoles", "tag": "Best seller", "image": "", "c1": "#F4C430", "c2": "#7C5A2E", "bg": "from-yellow-100 to-peach/60" },
+    { "title": "Rosas Pastel", "tag": "Romántico", "image": "", "c1": "#E8A0BF", "c2": "#E07A5F", "bg": "from-pink-100 to-cream" },
+    { "title": "Manojo de Lavanda", "tag": "Relajante", "image": "", "c1": "#9B8AC4", "c2": "#7C9082", "bg": "from-purple-100 to-sage-100" },
+    { "title": "Tulipanes de Primavera", "tag": "Alegre", "image": "", "c1": "#E07A5F", "c2": "#F2C7B6", "bg": "from-orange-100 to-cream" },
+    { "title": "Bouquet Silvestre", "tag": "Personalizado", "image": "", "c1": "#7C9082", "c2": "#E07A5F", "bg": "from-sage-100 to-peach/50" },
+    { "title": "Caja de Margaritas", "tag": "Elegante", "image": "", "c1": "#FAF9F6", "c2": "#F4C430", "bg": "from-cream to-sage-100" }
+  ]
+}
